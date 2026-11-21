@@ -1,4 +1,4 @@
-# Opere in chiaro
+# eia-sea-atlas
 
 Prototipo di una **mappa pubblica europea georeferenziata** delle opere e degli impianti soggetti a valutazioni e autorizzazioni ambientali.
 
