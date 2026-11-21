@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opere in chiaro – Proposta di mappa pubblica europea delle autorizzazioni ambientali</title>
+<meta name="description" content="Proposta di iniziativa normativa per una mappa pubblica europea georeferenziata di opere e impianti, con il fascicolo ambientale e autorizzativo di ciascuna opera consultabile da tutti.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<style>
+:root{
+  --bg:#EDF1F1;
+  --surface:#FFFFFF;
+  --ink:#12303A;
+  --muted:#4A6670;
+  --line:#C9D5D7;
+  --map:#DFE8E9;
+  --teal:#1F6B70;
+  --amber:#B87A00;
+  --red:#B2341F;
+  --focus:#0B57D0;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1D22;
+    --surface:#16282E;
+    --ink:#E4EEEE;
+    --muted:#9DB4B9;
+    --line:#2B4249;
+    --map:#122329;
+    --teal:#5FB5B8;
+    --amber:#E3A91F;
+    --red:#E5755F;
+    --focus:#8AB4F8;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:1.0625rem;
+  line-height:1.6;
+}
+h1,h2,h3{font-family:"Literata",Georgia,serif;line-height:1.15;margin:0;font-weight:600;letter-spacing:-0.01em}
+p{margin:0 0 1rem}
+a{color:var(--teal)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.25rem}
+
+/* Intestazione */
+.site-head{border-bottom:1px solid var(--line)}
+.site-head .wrap{display:flex;gap:1.5rem;align-items:baseline;justify-content:space-between;flex-wrap:wrap;padding-top:1rem;padding-bottom:1rem}
+.brand{font-family:"Literata",Georgia,serif;font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--ink)}
+.site-head nav{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.95rem}
+.site-head nav a{color:var(--muted);text-decoration:none}
+.site-head nav a:hover{color:var(--ink);text-decoration:underline}
+
+/* Apertura */
+.hero{padding:3.5rem 0 2rem}
+.hero h1{font-size:clamp(2.1rem,5vw,3.6rem);max-width:18ch}
+.hero p.lead{font-size:1.2rem;color:var(--muted);max-width:56ch;margin-top:1.25rem}
+
+/* Dimostrazione mappa */
+.demo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:1.25rem;margin:1.5rem 0 4rem}
+@media (max-width:860px){.demo{grid-template-columns:1fr}}
+.map-card,.file-card{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.map-card{padding:1rem}
+.map-bar{display:flex;gap:.75rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:.75rem}
+.map-bar .scale{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.map-bar .scale button{
+  font:inherit;font-size:.92rem;background:transparent;color:var(--ink);border:0;padding:.5rem .9rem;cursor:pointer;
+}
+.map-bar .scale button+button{border-left:1px solid var(--line)}
+.map-bar .scale button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.map-bar .caption{font-size:.92rem;color:var(--muted);margin:0}
+
+#map{display:block;width:100%;height:500px;border-radius:6px;background:var(--map);z-index:0}
+@media (max-width:860px){#map{height:380px}}
+#fallback{display:block;width:100%;height:auto;background:var(--map);border-radius:6px}
+#fallback .contour{fill:none;stroke:var(--line);stroke-width:1.5}
+.map-note{font-size:.88rem;color:var(--muted);margin:.75rem 0 0}
+.leaflet-container{font-family:inherit}
+
+.mk{background:none;border:0}
+.leaflet-marker-icon.mk svg{display:block;width:30px;height:30px;overflow:visible;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.mk .shape{stroke:#fff;stroke-width:2.5}
+.mk.ok .shape{fill:var(--teal)}
+.mk.proc .shape{fill:var(--amber)}
+.mk.irr .shape{fill:var(--red)}
+.mk .ring{fill:none;stroke:var(--ink);stroke-width:2.5;opacity:0}
+.mk.sel .ring{opacity:1}
+.fb-pt{cursor:pointer}
+.fb-pt:focus{outline:none}
+.fb-pt:focus-visible .ring{opacity:1;stroke:var(--focus)}
+.leaflet-marker-icon:focus{outline:none}
+.leaflet-marker-icon:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:50%}
+@media (prefers-color-scheme: dark){
+  .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.95) contrast(.9)}
+}
+
+.legend{display:flex;gap:1.25rem;flex-wrap:wrap;margin:.75rem 0 0;padding:0;list-style:none;font-size:.9rem;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:.4rem}
+.legend svg{width:16px;height:16px}
+.demo-note{font-size:.85rem;color:var(--muted);margin:.75rem 0 0}
+
+.file-card{padding:1.25rem 1.25rem 1.5rem}
+.file-card .empty{color:var(--muted);margin:0}
+.file-card h3{font-size:1.3rem}
+.file-card .code{font-size:.9rem;color:var(--muted);margin:.25rem 0 .9rem}
+.badge{display:inline-flex;align-items:center;gap:.45rem;font-weight:600;font-size:.92rem;margin-bottom:1rem}
+.badge svg{width:16px;height:16px}
+.badge.ok{color:var(--teal)} .badge.proc{color:var(--amber)} .badge.irr{color:var(--red)}
+.file-card dl{margin:0 0 1.1rem;display:grid;grid-template-columns:auto 1fr;gap:.35rem 1rem;font-size:.95rem}
+.file-card dt{color:var(--muted)}
+.file-card dd{margin:0}
+.file-card h4{margin:0 0 .5rem;font-size:.98rem}
+.titles{list-style:none;margin:0;padding:0;font-size:.95rem}
+.titles li{display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;border-top:1px solid var(--line)}
+.titles li span:last-child{white-space:nowrap;color:var(--muted)}
+.titles li.miss span:last-child{color:var(--red);font-weight:600}
+.titles li.pend span:last-child{color:var(--amber);font-weight:600}
+
+/* Sezioni */
+section.block{padding:3rem 0;border-top:1px solid var(--line)}
+section.block h2{font-size:clamp(1.6rem,3.4vw,2.2rem);margin-bottom:1.25rem;max-width:24ch}
+.prose{max-width:62ch}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:2.5rem}
+@media (max-width:860px){.two{grid-template-columns:1fr;gap:1rem}}
+.feat{display:grid;gap:1.5rem 2.5rem;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:2rem}
+@media (max-width:760px){.feat{grid-template-columns:1fr}}
+.feat h3{font-size:1.15rem;margin-bottom:.35rem}
+.feat p{margin:0;color:var(--muted)}
+.docs{columns:2;column-gap:2.5rem;margin:1.5rem 0 0;padding:0;list-style:none;max-width:860px}
+@media (max-width:700px){.docs{columns:1}}
+.docs li{break-inside:avoid;padding:.55rem 0;border-top:1px solid var(--line)}
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
+@media (max-width:760px){.compare{grid-template-columns:1fr}}
+.compare div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.25rem}
+.compare h3{font-size:1.2rem;margin-bottom:.5rem}
+.compare p{margin:0;color:var(--muted)}
+.ask{background:var(--ink);color:var(--surface);border-radius:12px;padding:2rem}
+.ask h2{max-width:none}
+.ask p{max-width:62ch}
+.ask p:last-child{margin-bottom:0}
+
+footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;font-size:.9rem;color:var(--muted)}
+footer p{margin:0}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="#top">Opere in chiaro</a>
+    <nav aria-label="Sezioni">
+      <a href="#origine">Il problema</a>
+      <a href="#proposta">La proposta</a>
+      <a href="#fascicolo">Il fascicolo</a>
+      <a href="#benefici">Cosa cambia</a>
+      <a href="#richiesta">La richiesta</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <section class="hero">
+      <h1>Cosa c’è vicino a casa tua, e con quali autorizzazioni?</h1>
+      <p class="lead">Una proposta per una mappa pubblica europea in cui ogni opera e ogni impianto ha il suo fascicolo digitale: chiunque può aprirlo, leggerlo e scaricarlo.</p>
+    </section>
+
+    <!-- Dimostrazione interattiva -->
+    <div class="demo" aria-label="Dimostrazione della mappa">
+      <div class="map-card">
+        <div class="map-bar">
+          <div class="scale" role="group" aria-label="Scala della mappa">
+            <button type="button" data-view="ue" aria-pressed="true">Unione europea</button>
+            <button type="button" data-view="paese" aria-pressed="false">Paese</button>
+            <button type="button" data-view="comune" aria-pressed="false">Comune</button>
+          </div>
+          <p class="caption" id="caption"></p>
+        </div>
+
+        <!-- Mappa dettagliata (Leaflet + OpenStreetMap) -->
+        <div id="map" role="region" aria-label="Mappa dimostrativa con opere e impianti"></div>
+
+        <!-- Mappa schematica: compare da sola se la mappa dettagliata non si carica -->
+        <svg id="fallback" viewBox="0 0 600 400" role="group" aria-label="Mappa schematica dimostrativa con opere e impianti" hidden>
+          <defs>
+            <pattern id="g" width="50" height="50" patternUnits="userSpaceOnUse">
+              <path d="M50 0H0V50" fill="none" stroke="var(--line)" stroke-width=".6" opacity=".7"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="400" fill="url(#g)"/>
+          <path class="contour" d="M-10 310 C 70 230, 150 270, 230 200 S 360 110, 450 160 S 560 240, 610 150"/>
+          <path class="contour" d="M-10 350 C 80 280, 170 320, 250 250 S 380 170, 470 215 S 570 290, 610 215"/>
+          <path class="contour" d="M-10 80 C 60 40, 140 70, 210 40 S 330 20, 400 60 S 540 70, 610 30"/>
+          <g id="fbpoints"></g>
+        </svg>
+        <p class="map-note" id="mapnote" hidden>
+          Questa è una mappa schematica: la mappa dettagliata non si è caricata. Aprendo il file in un browser con la connessione internet attiva compare la mappa vera, fino al livello comunale.
+          <a id="osmlink" href="https://www.openstreetmap.org/" target="_blank" rel="noopener">Apri questa zona su OpenStreetMap</a>
+        </p>
+
+        <ul class="legend" aria-label="Legenda">
+          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="9" fill="var(--teal)"/></svg>Titoli in regola</li>
+          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,0 L0,11 L-11,0Z" fill="var(--amber)"/></svg>Procedimento in corso</li>
+          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,9 L-11,9Z" fill="var(--red)"/></svg>Titoli mancanti</li>
+        </ul>
+        <p class="demo-note">Dimostrazione con dati inventati: i punti sono segnaposto e non corrispondono a opere reali. Trascina per spostarti e usa + e − per ingrandire.</p>
+      </div>
+
+      <aside class="file-card" id="file" aria-live="polite">
+        <p class="empty">Scegli un punto sulla mappa per aprire il fascicolo dell’opera.</p>
+      </aside>
+    </div>
+
+    <section class="block" id="origine">
+      <div class="two">
+        <h2>Il problema</h2>
+        <div class="prose">
+          <p>Oggi sapere che cosa è stato autorizzato vicino a casa può richiedere anni di richieste a uffici diversi.</p>
+          <p>Nel frattempo un impianto può funzionare con rumori e vibrazioni pesanti per chi vive accanto, e solo alla fine emerge che i titoli necessari non risultano rilasciati.</p>
+          <p>I documenti sono sparsi in archivi diversi e il cittadino deve già sapere a chi chiederli. Questa proposta vuole cambiare questo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="proposta">
+      <h2>Una mappa per tutta l’Unione, fino al comune</h2>
+      <p class="prose">Una piattaforma pubblica europea in cui sono censite tutte le opere, gli impianti e le attività soggetti, o potenzialmente soggetti, a valutazioni, verifiche o autorizzazioni ambientali. Funzionerebbe così:</p>
+      <div class="feat">
+        <div>
+          <h3>Mappa a ogni scala</h3>
+          <p>Si consulta dall’intero territorio dell’Unione fino al singolo comune.</p>
+        </div>
+        <div>
+          <h3>Un fascicolo per ogni opera</h3>
+          <p>Selezionando un’opera sulla mappa, chiunque può consultare e scaricare il suo fascicolo digitale con tutta la documentazione amministrativa e autorizzativa.</p>
+        </div>
+        <div>
+          <h3>Un codice europeo unico</h3>
+          <p>Ogni opera ha un codice identificativo e una scheda con posizione, soggetto responsabile, amministrazioni competenti, titoli richiesti e rilasciati, e stato.</p>
+        </div>
+        <div>
+          <h3>Anche ciò che manca</h3>
+          <p>Sono censite le opere con procedimenti in corso, quelle senza i titoli necessari o con irregolarità accertate, e gli esiti delle verifiche che stabiliscono che un’autorizzazione non serve.</p>
+        </div>
+        <div>
+          <h3>Aggiornamento obbligatorio</h3>
+          <p>Le amministrazioni aggiornano il fascicolo a ogni rilascio, modifica, rinnovo, sospensione o revoca, e lo storico dei procedimenti resta consultabile.</p>
+        </div>
+        <div>
+          <h3>Ricerca senza conoscere l’ufficio</h3>
+          <p>Si cerca per territorio, indirizzo, tipo di attività o soggetto responsabile, senza dover sapere quale ufficio conserva i documenti.</p>
+        </div>
+        <div>
+          <h3>Segnalazioni dei cittadini</h3>
+          <p>Chi trova un’opera non censita, o informazioni mancanti o non aggiornate, può segnalarlo. L’amministrazione competente verifica e risponde.</p>
+        </div>
+        <div>
+          <h3>Regole comuni, competenze nazionali</h3>
+          <p>Criteri europei uniformi di classificazione, indicizzazione e pubblicazione, nel rispetto delle normative nazionali e delle competenze di ogni Stato.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="fascicolo">
+      <h2>Che cosa conterrebbe il fascicolo</h2>
+      <p class="prose">In base al tipo di opera e alla normativa applicabile:</p>
+      <ul class="docs">
+        <li>Valutazioni di impatto ambientale (VIA) e verifiche di assoggettabilità</li>
+        <li>Valutazioni ambientali strategiche (VAS) e valutazioni di incidenza ambientale (VIncA), dove pertinenti</li>
+        <li>Autorizzazioni integrate ambientali (AIA) e autorizzazioni alle emissioni</li>
+        <li>Titoli per il prelievo e l’utilizzo delle risorse idriche</li>
+        <li>Autorizzazioni agli scarichi e alla gestione delle acque</li>
+        <li>Autorizzazioni in materia di rifiuti</li>
+        <li>Autorizzazioni paesaggistiche e di tutela della natura e delle aree protette</li>
+        <li>Prescrizioni, controlli e dati di monitoraggio</li>
+        <li>Modifiche, rinnovi, sospensioni, revoche ed eventuali procedimenti di regolarizzazione</li>
+      </ul>
+    </section>
+
+    <section class="block" id="benefici">
+      <h2>Cosa cambia per cittadini e amministrazioni</h2>
+      <div class="compare">
+        <div>
+          <h3>Per i cittadini</h3>
+          <p>Conoscere subito la situazione ambientale e autorizzativa delle opere sul proprio territorio, comprese eventuali carenze o irregolarità, senza ripetute richieste di documenti a uffici diversi.</p>
+        </div>
+        <div>
+          <h3>Per le amministrazioni</h3>
+          <p>Uno strumento di semplificazione, collaborazione e controllo, che riduce la frammentazione degli archivi e i tempi di ricerca.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="esistente">
+      <div class="two">
+        <h2>Si parte da ciò che esiste già</h2>
+        <div class="prose">
+          <p>L’Unione europea dispone già di strumenti sull’informazione territoriale e ambientale, tra cui INSPIRE e il Portale europeo sulle emissioni industriali.</p>
+          <p>La proposta non li sostituisce: li integra in un sistema che permette di individuare ogni singola opera e di consultarne l’intero fascicolo amministrativo e autorizzativo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="richiesta">
+      <div class="ask">
+        <h2>La richiesta alle istituzioni</h2>
+        <p>La proposta si rivolge a Ministero dell’Ambiente e della Sicurezza Energetica, Camera dei deputati, Senato della Repubblica, Presidenza della Repubblica, Commissione europea (DG Ambiente) e Parlamento europeo (commissioni ENVI e PETI, deputati italiani e Ufficio di collegamento in Italia).</p>
+        <p>L’Italia può promuovere questa iniziativa normativa, ma la proposta può essere valutata anche direttamente a livello europeo, indipendentemente da un eventuale ruolo formale dell’Italia.</p>
+        <p>Si chiede che venga presa in considerazione a livello nazionale ed europeo, nell’interesse della trasparenza amministrativa, della tutela ambientale e del diritto dei cittadini all’informazione.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Proposta di iniziativa normativa nazionale ed europea.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+(function(){
+  var SHAPES = {
+    ok:   {d:null, label:"Titoli in regola"},
+    proc: {d:"M0,-11 L11,0 L0,11 L-11,0Z", label:"Procedimento in corso"},
+    irr:  {d:"M0,-11 L11,9 L-11,9Z", label:"Titoli mancanti"}
+  };
+  var TPL = [
+    {name:"Impianto industriale", titles:["Autorizzazione integrata ambientale (AIA)","Emissioni in atmosfera","Autorizzazione agli scarichi","Verifica di assoggettabilità a VIA"]},
+    {name:"Impianto di gestione rifiuti", titles:["Valutazione di impatto ambientale (VIA)","Autorizzazione integrata ambientale (AIA)","Autorizzazione in materia di rifiuti","Autorizzazione paesaggistica"]},
+    {name:"Opera di prelievo idrico", titles:["Concessione di prelievo idrico","Autorizzazione agli scarichi","Valutazione di incidenza (VIncA)"]},
+    {name:"Impianto per l’energia", titles:["Valutazione di impatto ambientale (VIA)","Autorizzazione paesaggistica","Valutazione di incidenza (VIncA)","Piano di monitoraggio"]}
+  ];
+
+  // pts: [latitudine, longitudine, stato, modello, codice, posizione]
+  // box: limiti della vista per la mappa schematica
+  var VIEWS = {
+    ue: {
+      center:[50.0,10.0], zoom:4,
+      box:{n:66,s:34,w:-12,e:34},
+      caption:"Vista europea: un punto per opera o gruppo di opere.",
+      pts:[
+        [45.76,4.84,"ok",0,"EU-FR-000812","Area industriale, Francia"],
+        [51.30,9.50,"irr",1,"EU-DE-001204","Zona produttiva, Germania"],
+        [52.20,19.40,"proc",3,"EU-PL-000377","Area energetica, Polonia"],
+        [40.40,-3.70,"ok",2,"EU-ES-002210","Bacino fluviale, Spagna"],
+        [45.00,9.70,"irr",0,"EU-IT-000417","Area industriale, Italia"],
+        [61.50,25.70,"ok",3,"EU-FI-000095","Area energetica, Finlandia"]
+      ]
+    },
+    paese: {
+      center:[42.8,12.6], zoom:6,
+      box:{n:47.5,s:36,w:6,e:19},
+      caption:"Vista nazionale: le opere di un intero Paese.",
+      pts:[
+        [45.50,9.20,"ok",1,"EU-IT-003301","Nord Italia, area di esempio"],
+        [44.50,11.30,"proc",0,"EU-IT-003412","Nord Italia, area di esempio"],
+        [43.80,11.20,"ok",3,"EU-IT-003518","Centro Italia, area di esempio"],
+        [41.90,12.50,"irr",0,"EU-IT-000417","Centro Italia, area di esempio"],
+        [40.85,14.25,"ok",2,"EU-IT-003790","Sud Italia, area di esempio"],
+        [38.10,13.40,"proc",1,"EU-IT-003844","Sicilia, area di esempio"]
+      ]
+    },
+    comune: {
+      center:[44.8015,10.3279], zoom:13,
+      box:{n:44.85,s:44.755,w:10.26,e:10.40},
+      caption:"Vista comunale: ogni opera del territorio.",
+      pts:[
+        [44.805,10.310,"ok",0,"EU-IT-007120","Via di esempio 1"],
+        [44.790,10.345,"proc",2,"EU-IT-007133","Località di esempio 2"],
+        [44.815,10.360,"irr",0,"EU-IT-000417","Via di esempio 3, vicino alle abitazioni"],
+        [44.775,10.300,"ok",3,"EU-IT-007201","Contrada di esempio 4"],
+        [44.830,10.330,"ok",1,"EU-IT-007254","Zona produttiva di esempio 5"]
+      ]
+    }
+  };
+
+  var PROVIDERS = [
+    {url:"https://tile.openstreetmap.org/{z}/{x}/{y}.png", sub:"abc",
+     attr:'&copy; <a href="https://www.openstreetmap.org/copyright">Contributori di OpenStreetMap</a>'},
+    {url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", sub:"abcd",
+     attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}
+  ];
+
+  var fileEl = document.getElementById("file");
+  var captionEl = document.getElementById("caption");
+  var mapEl = document.getElementById("map");
+  var fbEl = document.getElementById("fallback");
+  var fbPoints = document.getElementById("fbpoints");
+  var noteEl = document.getElementById("mapnote");
+  var osmLink = document.getElementById("osmlink");
+  var buttons = document.querySelectorAll(".scale button");
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var mode = "leaflet";
+  var current = "ue";
+  var selectedEl = null;
+  var map = null, layer = null, tiles = null, provIdx = 0, errs = 0, loaded = false, timer = null;
+
+  /* ---------- Scheda dell'opera ---------- */
+  function titleStates(tpl, state){
+    var n = TPL[tpl].titles.length;
+    return TPL[tpl].titles.map(function(t, i){
+      var s = "Rilasciato", cls = "";
+      if (state === "proc" && i >= n - 2){ s = "In corso"; cls = "pend"; }
+      if (state === "irr" && i < 2){ s = "Non risulta rilasciato"; cls = "miss"; }
+      return {t:t, s:s, cls:cls};
+    });
+  }
+  function iconSvg(state){
+    if (state === "ok") return '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="9" fill="currentColor"/></svg>';
+    return '<svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="'+SHAPES[state].d+'" fill="currentColor"/></svg>';
+  }
+  function showFile(p){
+    var tpl = p[3], state = p[2];
+    var rows = titleStates(tpl, state).map(function(r){
+      return '<li class="'+r.cls+'"><span>'+r.t+'</span><span>'+r.s+'</span></li>';
+    }).join("");
+    fileEl.innerHTML =
+      '<h3>'+TPL[tpl].name+'</h3>' +
+      '<p class="code">Codice '+p[4]+'</p>' +
+      '<div class="badge '+state+'">'+iconSvg(state)+SHAPES[state].label+'</div>' +
+      '<dl>' +
+        '<dt>Posizione</dt><dd>'+p[5]+'</dd>' +
+        '<dt>Responsabile</dt><dd>Società di esempio</dd>' +
+        '<dt>Competenti</dt><dd>Regione, Comune e autorità ambientale</dd>' +
+      '</dl>' +
+      '<h4>Titoli richiesti e stato</h4>' +
+      '<ul class="titles">'+rows+'</ul>';
+  }
+  function choose(el, p){
+    if (selectedEl) selectedEl.classList.remove("sel");
+    selectedEl = el;
+    el.classList.add("sel");
+    showFile(p);
+  }
+  function label(p){ return TPL[p[3]].name+", "+p[5]+": "+SHAPES[p[2]].label; }
+  function shapeSvg(state){
+    return state === "ok" ? '<circle class="shape" r="9"/>' : '<path class="shape" d="'+SHAPES[state].d+'"/>';
+  }
+
+  /* ---------- Mappa dettagliata (Leaflet) ---------- */
+  function renderLeaflet(key){
+    var v = VIEWS[key];
+    layer.clearLayers();
+    v.pts.forEach(function(p){
+      var icon = L.divIcon({
+        className:"mk "+p[2],
+        html:'<svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="ring" r="14"/>'+shapeSvg(p[2])+'</svg>',
+        iconSize:[30,30], iconAnchor:[15,15]
+      });
+      var m = L.marker([p[0], p[1]], {icon:icon, keyboard:true, title:label(p), alt:label(p)});
+      m.on("click", function(){ choose(m.getElement(), p); });
+      m.addTo(layer);
+    });
+  }
+  function mountTiles(i){
+    if (tiles) map.removeLayer(tiles);
+    var pv = PROVIDERS[i];
+    errs = 0;
+    tiles = L.tileLayer(pv.url, {maxZoom:19, subdomains:pv.sub, attribution:pv.attr});
+    tiles.on("tileload", function(){ loaded = true; clearTimeout(timer); });
+    tiles.on("tileerror", function(){
+      if (loaded || mode !== "leaflet") return;
+      errs++;
+      if (errs === 3){
+        if (provIdx < PROVIDERS.length - 1){ provIdx++; mountTiles(provIdx); }
+        else useFallback();
+      }
+    });
+    tiles.addTo(map);
+  }
+  function initLeaflet(){
+    map = L.map("map", {scrollWheelZoom:false, worldCopyJump:true})
+      .setView(VIEWS.ue.center, VIEWS.ue.zoom);
+    layer = L.layerGroup().addTo(map);
+    mountTiles(0);
+    timer = setTimeout(function(){ if (!loaded) useFallback(); }, 9000);
+  }
+
+  /* ---------- Mappa schematica (se quella dettagliata non si carica) ---------- */
+  function project(v, lat, lng){
+    var b = v.box;
+    return [ (lng - b.w) / (b.e - b.w) * 600, (b.n - lat) / (b.n - b.s) * 400 ];
+  }
+  function renderFallback(key){
+    var v = VIEWS[key];
+    fbPoints.innerHTML = "";
+    v.pts.forEach(function(p){
+      var xy = project(v, p[0], p[1]);
+      var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("class", "fb-pt mk "+p[2]);
+      g.setAttribute("transform", "translate("+xy[0].toFixed(1)+","+xy[1].toFixed(1)+")");
+      g.setAttribute("tabindex", "0");
+      g.setAttribute("role", "button");
+      g.setAttribute("aria-label", label(p));
+      g.innerHTML = '<circle r="20" fill="transparent"/><circle class="ring" r="17"/>'+shapeSvg(p[2]);
+      g.addEventListener("click", function(){ choose(g, p); });
+      g.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); choose(g, p); }
+      });
+      fbPoints.appendChild(g);
+    });
+  }
+  function updateOsmLink(){
+    var v = VIEWS[current];
+    osmLink.href = "https://www.openstreetmap.org/#map="+v.zoom+"/"+v.center[0]+"/"+v.center[1];
+  }
+  function useFallback(){
+    if (mode === "fallback") return;
+    mode = "fallback";
+    clearTimeout(timer);
+    mapEl.hidden = true;
+    fbEl.hidden = false;
+    noteEl.hidden = false;
+    selectedEl = null;
+    updateOsmLink();
+    renderFallback(current);
+  }
+
+  /* ---------- Cambio di scala ---------- */
+  function setView(key){
+    current = key;
+    var v = VIEWS[key];
+    captionEl.textContent = v.caption;
+    selectedEl = null;
+    fileEl.innerHTML = '<p class="empty">Scegli un punto sulla mappa per aprire il fascicolo dell’opera.</p>';
+    updateOsmLink();
+    if (mode === "leaflet"){
+      renderLeaflet(key);
+      if (reduce) map.setView(v.center, v.zoom);
+      else map.flyTo(v.center, v.zoom, {duration:1.4});
+    } else {
+      renderFallback(key);
+    }
+  }
+
+  buttons.forEach(function(b){
+    b.addEventListener("click", function(){
+      buttons.forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      setView(b.getAttribute("data-view"));
+    });
+  });
+
+  /* ---------- Avvio ---------- */
+  captionEl.textContent = VIEWS.ue.caption;
+  if (typeof L === "undefined"){
+    mode = "leaflet";
+    useFallback();
+  } else {
+    initLeaflet();
+    renderLeaflet("ue");
+  }
+})();
+</script>
+</body>
+</html>
