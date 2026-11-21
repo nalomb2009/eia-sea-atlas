@@ -11,7 +11,7 @@ L'idea: ogni opera ha un proprio **fascicolo digitale** (valutazioni, autorizzaz
 ## Provarlo
 
 1. Scarica `index.html`.
-2. Aprilo con un browser (Chrome, Firefox, Safari o Edge) con la connessione internet attiva: le carte arrivano dai server di OpenStreetMap.
+2. Aprilo con un browser (Chrome, Firefox, Safari o Edge) con la connessione internet attiva: le carte arrivano da server esterni (OpenTopoMap e OpenStreetMap).
 3. Scegli la scala (Unione europea, Paese, Comune) e clicca un punto per aprire la scheda dell'opera.
 
 Per avere un indirizzo web pubblico e gratuito: **Settings → Pages → Deploy from a branch → `main` / `(root)`**. Dopo un minuto il sito è visibile su `https://NOME-UTENTE.github.io/NOME-REPOSITORY/`.
@@ -19,7 +19,7 @@ Per avere un indirizzo web pubblico e gratuito: **Settings → Pages → Deploy 
 ## Cosa fa
 
 - Pagina unica in HTML, CSS e JavaScript, senza framework e senza server.
-- Mappa dettagliata con [Leaflet](https://leafletjs.com) e le carte di [OpenStreetMap](https://www.openstreetmap.org).
+- Mappa con [Leaflet](https://leafletjs.com): carta fisica con rilievo ([OpenTopoMap](https://opentopomap.org)) e carta stradale ([OpenStreetMap](https://www.openstreetmap.org)), con selettore.
 - Tre scale di partenza: Unione europea, Paese, Comune.
 - Tre stati delle opere (titoli in regola, procedimento in corso, titoli mancanti), distinti da colore **e** forma.
 - Scheda dell'opera con codice identificativo, posizione, responsabile, amministrazioni competenti e stato di ogni titolo.
@@ -55,6 +55,7 @@ Apri una *Issue* per proporre un'idea o segnalare un problema, oppure una *Pull 
 ## Componenti e licenze di terze parti
 
 - **Leaflet 1.9.4**: licenza BSD a due clausole.
+- **OpenTopoMap** (carta fisica con rilievo): stile con licenza CC-BY-SA, dati OpenStreetMap e SRTM, attribuzione già nel codice. Il servizio ha limiti d'uso: per molto traffico serve un fornitore dedicato.
 - **OpenStreetMap**: dati con licenza ODbL, con obbligo di citare i contributori (già presente nel codice).
 - **CARTO** (carte di riserva basate su OpenStreetMap): richiede attribuzione; prima di un uso stabile vanno verificate le condizioni d'uso.
 - **Literata** e **Public Sans**: caratteri caricati da Google Fonts, licenza SIL Open Font.

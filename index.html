@@ -111,9 +111,6 @@ a{color:var(--teal)}
 .fb-pt:focus-visible .ring{opacity:1;stroke:var(--focus)}
 .leaflet-marker-icon:focus{outline:none}
 .leaflet-marker-icon:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:50%}
-@media (prefers-color-scheme: dark){
-  .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.95) contrast(.9)}
-}
 
 .legend{display:flex;gap:1.25rem;flex-wrap:wrap;margin:.75rem 0 0;padding:0;list-style:none;font-size:.9rem;color:var(--muted)}
 .legend li{display:flex;align-items:center;gap:.4rem}
@@ -226,7 +223,7 @@ footer p{margin:0}
           <g id="fbpoints"></g>
         </svg>
         <p class="map-note" id="mapnote" hidden>
-          Questa è una mappa schematica: la mappa dettagliata non si è caricata. Aprendo il file in un browser con la connessione internet attiva compare la mappa vera, fino al livello comunale.
+          Questa è una mappa schematica: la mappa dettagliata non si è caricata. Aprendo la pagina in un browser con la connessione internet attiva compare la mappa vera, fisica o stradale, fino al livello comunale.
           <a id="osmlink" href="https://www.openstreetmap.org/" target="_blank" rel="noopener">Apri questa zona su OpenStreetMap</a>
         </p>
 
@@ -235,7 +232,7 @@ footer p{margin:0}
           <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,0 L0,11 L-11,0Z" fill="var(--amber)"/></svg>Procedimento in corso</li>
           <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,9 L-11,9Z" fill="var(--red)"/></svg>Titoli mancanti</li>
         </ul>
-        <p class="demo-note">Dimostrazione con dati inventati: i punti sono segnaposto e non corrispondono a opere reali. Trascina per spostarti e usa + e − per ingrandire.</p>
+        <p class="demo-note">Dimostrazione con dati inventati: i punti sono segnaposto e non corrispondono a opere reali. Trascina per spostarti e usa + e − per ingrandire. In alto a destra puoi passare dalla mappa fisica a quella stradale.</p>
       </div>
 
       <aside class="file-card" id="file" aria-live="polite">
@@ -421,9 +418,11 @@ footer p{margin:0}
   };
 
   var PROVIDERS = [
-    {url:"https://tile.openstreetmap.org/{z}/{x}/{y}.png", sub:"abc",
+    {nome:"Mappa fisica", url:"https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", sub:"abc", nativeMax:17,
+     attr:'Dati &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Stile &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'},
+    {nome:"Mappa stradale", url:"https://tile.openstreetmap.org/{z}/{x}/{y}.png", sub:"abc", nativeMax:19,
      attr:'&copy; <a href="https://www.openstreetmap.org/copyright">Contributori di OpenStreetMap</a>'},
-    {url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", sub:"abcd",
+    {nome:"Mappa di riserva", url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", sub:"abcd", nativeMax:19,
      attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}
   ];
 
@@ -440,7 +439,7 @@ footer p{margin:0}
   var mode = "leaflet";
   var current = "ue";
   var selectedEl = null;
-  var map = null, layer = null, tiles = null, provIdx = 0, errs = 0, loaded = false, timer = null;
+  var map = null, layer = null, layers = [], active = 0, errs = [], loaded = false, timer = null;
 
   /* ---------- Scheda dell'opera ---------- */
   function titleStates(tpl, state){
@@ -499,27 +498,41 @@ footer p{margin:0}
       m.addTo(layer);
     });
   }
-  function mountTiles(i){
-    if (tiles) map.removeLayer(tiles);
+  function makeLayer(i){
     var pv = PROVIDERS[i];
-    errs = 0;
-    tiles = L.tileLayer(pv.url, {maxZoom:19, subdomains:pv.sub, attribution:pv.attr});
-    tiles.on("tileload", function(){ loaded = true; clearTimeout(timer); });
-    tiles.on("tileerror", function(){
-      if (loaded || mode !== "leaflet") return;
-      errs++;
-      if (errs === 3){
-        if (provIdx < PROVIDERS.length - 1){ provIdx++; mountTiles(provIdx); }
-        else useFallback();
-      }
+    var l = L.tileLayer(pv.url, {subdomains:pv.sub, maxNativeZoom:pv.nativeMax, maxZoom:19, attribution:pv.attr});
+    errs[i] = 0;
+    l.on("tileload", function(){ loaded = true; clearTimeout(timer); });
+    l.on("tileerror", function(){
+      if (loaded || mode !== "leaflet" || active !== i) return;
+      errs[i]++;
+      if (errs[i] === 3) nextProvider();
     });
-    tiles.addTo(map);
+    return l;
+  }
+  function nextProvider(){
+    map.removeLayer(layers[active]);
+    if (active < PROVIDERS.length - 1){
+      active++;
+      layers[active].addTo(map);
+    } else {
+      useFallback();
+    }
   }
   function initLeaflet(){
     map = L.map("map", {scrollWheelZoom:false, worldCopyJump:true})
       .setView(VIEWS.ue.center, VIEWS.ue.zoom);
     layer = L.layerGroup().addTo(map);
-    mountTiles(0);
+    for (var i = 0; i < PROVIDERS.length; i++) layers.push(makeLayer(i));
+    layers[0].addTo(map);
+    var base = {};
+    base[PROVIDERS[0].nome] = layers[0];
+    base[PROVIDERS[1].nome] = layers[1];
+    L.control.layers(base, null, {collapsed:false}).addTo(map);
+    map.on("baselayerchange", function(e){
+      var i = layers.indexOf(e.layer);
+      if (i >= 0){ active = i; errs[i] = 0; }
+    });
     timer = setTimeout(function(){ if (!loaded) useFallback(); }, 9000);
   }
 
