@@ -1,4 +1,6 @@
-# eia-sea-atlas
+# EIA-SEA Atlas
+
+*English:* open prototype of a public, georeferenced European map of works and plants subject to environmental assessments and permits (EIA, SEA, IED/IPPC and more). Each site has its own digital file. All data are made up. Contributions welcome.
 
 Prototipo di una **mappa pubblica europea georeferenziata** delle opere e degli impianti soggetti a valutazioni e autorizzazioni ambientali.
 
