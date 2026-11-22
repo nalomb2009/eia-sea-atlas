@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<!-- Licensed under the EUPL v. 1.2 - vedi LICENSE.txt nel repository -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EIA-SEA Atlas – mappa pubblica europea delle autorizzazioni ambientali</title>
@@ -22,10 +23,10 @@
 :root{
   --bg:#EDF1F1;
   --surface:#FFFFFF;
-  --ink:#12303A;
-  --muted:#4A6670;
-  --line:#C9D5D7;
-  --map:#DFE8E9;
+  --ink:#0F3D2E;
+  --muted:#4C6A5D;
+  --line:#C9D9CF;
+  --map:#DDE9E0;
   --teal:#1F6B70;
   --amber:#B87A00;
   --red:#B2341F;
@@ -34,12 +35,12 @@
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#0F1D22;
-    --surface:#16282E;
+    --bg:#0B2A20;
+    --surface:#123629;
     --ink:#E4EEEE;
-    --muted:#9DB4B9;
-    --line:#2B4249;
-    --map:#122329;
+    --muted:#A3C0B1;
+    --line:#2A5646;
+    --map:#103024;
     --teal:#5FB5B8;
     --amber:#E3A91F;
     --red:#E5755F;
@@ -67,6 +68,7 @@ a{color:var(--teal)}
 /* Intestazione */
 .site-head{border-bottom:1px solid var(--line)}
 .site-head .wrap{display:flex;gap:1.5rem;align-items:baseline;justify-content:space-between;flex-wrap:wrap;padding-top:1rem;padding-bottom:1rem}
+.lang{font:inherit;font-size:.92rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.35rem .6rem}
 .brand{font-family:"Literata",Georgia,serif;font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--ink)}
 .site-head nav{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.95rem}
 .site-head nav a{color:var(--muted);text-decoration:none}
@@ -174,14 +176,21 @@ footer p{margin:0}
 <header class="site-head">
   <div class="wrap">
     <a class="brand" href="#top">EIA-SEA Atlas</a>
-    <nav aria-label="Sezioni">
-      <a href="#origine">Il problema</a>
-      <a href="#proposta">La proposta</a>
-      <a href="#fascicolo">Il fascicolo</a>
-      <a href="#benefici">Cosa cambia</a>
-      <a href="#richiesta">La richiesta</a>
-      <a href="#contribuisci">Contribuisci</a>
+    <nav aria-label="Sezioni" data-i18n-attr="aria-label:nav.aria">
+      <a href="#origine" data-i18n="nav.problem">Il problema</a>
+      <a href="#proposta" data-i18n="nav.proposal">La proposta</a>
+      <a href="#fascicolo" data-i18n="nav.file">Il fascicolo</a>
+      <a href="#benefici" data-i18n="nav.change">Cosa cambia</a>
+      <a href="#richiesta" data-i18n="nav.request">La richiesta</a>
+      <a href="#contribuisci" data-i18n="nav.contribute">Contribuisci</a>
     </nav>
+    <select id="lang" class="lang" aria-label="Lingua" data-i18n-attr="aria-label:lang.label">
+      <option value="it">Italiano</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="pt">Português</option>
+    </select>
   </div>
 </header>
 
@@ -189,28 +198,28 @@ footer p{margin:0}
   <div class="wrap">
 
     <section class="hero">
-      <h1>Cosa c’è vicino a casa tua, e con quali autorizzazioni?</h1>
-      <p class="lead">Una proposta per una mappa pubblica europea in cui ogni opera e ogni impianto ha il suo fascicolo digitale: chiunque può aprirlo, leggerlo e scaricarlo.</p>
-      <p class="note">EIA e SEA sono i nomi inglesi della valutazione di impatto ambientale (VIA) e della valutazione ambientale strategica (VAS).</p>
+      <h1 data-i18n="hero.title">Cosa c’è vicino a casa tua, e con quali autorizzazioni?</h1>
+      <p class="lead" data-i18n="hero.lead">Una proposta per una mappa pubblica europea in cui ogni opera e ogni impianto ha il suo fascicolo digitale: chiunque può aprirlo, leggerlo e scaricarlo.</p>
+      <p class="note" data-i18n="hero.note">EIA e SEA sono i nomi inglesi della valutazione di impatto ambientale (VIA) e della valutazione ambientale strategica (VAS).</p>
     </section>
 
     <!-- Dimostrazione interattiva -->
-    <div class="demo" aria-label="Dimostrazione della mappa">
+    <div class="demo" aria-label="Dimostrazione della mappa" data-i18n-attr="aria-label:demo.aria">
       <div class="map-card">
         <div class="map-bar">
-          <div class="scale" role="group" aria-label="Scala della mappa">
-            <button type="button" data-view="ue" aria-pressed="true">Unione europea</button>
-            <button type="button" data-view="paese" aria-pressed="false">Paese</button>
-            <button type="button" data-view="comune" aria-pressed="false">Comune</button>
+          <div class="scale" role="group" aria-label="Scala della mappa" data-i18n-attr="aria-label:scale.group">
+            <button type="button" data-view="ue" aria-pressed="true" data-i18n="scale.eu">Unione europea</button>
+            <button type="button" data-view="paese" aria-pressed="false" data-i18n="scale.country">Paese</button>
+            <button type="button" data-view="comune" aria-pressed="false" data-i18n="scale.municipality">Comune</button>
           </div>
           <p class="caption" id="caption"></p>
         </div>
 
         <!-- Mappa dettagliata (Leaflet + OpenStreetMap) -->
-        <div id="map" role="region" aria-label="Mappa dimostrativa con opere e impianti"></div>
+        <div id="map" role="region" aria-label="Mappa dimostrativa con opere e impianti" data-i18n-attr="aria-label:map.aria"></div>
 
         <!-- Mappa schematica: compare da sola se la mappa dettagliata non si carica -->
-        <svg id="fallback" viewBox="0 0 600 400" role="group" aria-label="Mappa schematica dimostrativa con opere e impianti" hidden>
+        <svg id="fallback" viewBox="0 0 600 400" role="group" aria-label="Mappa schematica dimostrativa con opere e impianti" data-i18n-attr="aria-label:fb.aria" hidden>
           <defs>
             <pattern id="g" width="50" height="50" patternUnits="userSpaceOnUse">
               <path d="M50 0H0V50" fill="none" stroke="var(--line)" stroke-width=".6" opacity=".7"/>
@@ -223,16 +232,16 @@ footer p{margin:0}
           <g id="fbpoints"></g>
         </svg>
         <p class="map-note" id="mapnote" hidden>
-          Questa è una mappa schematica: la mappa dettagliata non si è caricata. Aprendo la pagina in un browser con la connessione internet attiva compare la mappa vera, fisica o stradale, fino al livello comunale.
-          <a id="osmlink" href="https://www.openstreetmap.org/" target="_blank" rel="noopener">Apri questa zona su OpenStreetMap</a>
+          <span data-i18n="fb.note">Questa è una mappa schematica: la mappa dettagliata non si è caricata. Aprendo la pagina in un browser con la connessione internet attiva compare la mappa vera, fisica o stradale, fino al livello comunale.</span>
+          <a id="osmlink" href="https://www.openstreetmap.org/" target="_blank" rel="noopener" data-i18n="fb.link">Apri questa zona su OpenStreetMap</a>
         </p>
 
-        <ul class="legend" aria-label="Legenda">
-          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="9" fill="var(--teal)"/></svg>Titoli in regola</li>
-          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,0 L0,11 L-11,0Z" fill="var(--amber)"/></svg>Procedimento in corso</li>
-          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,9 L-11,9Z" fill="var(--red)"/></svg>Titoli mancanti</li>
+        <ul class="legend" aria-label="Legenda" data-i18n-attr="aria-label:legend.aria">
+          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="9" fill="var(--teal)"/></svg><span data-i18n="legend.ok">Titoli in regola</span></li>
+          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,0 L0,11 L-11,0Z" fill="var(--amber)"/></svg><span data-i18n="legend.proc">Procedimento in corso</span></li>
+          <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,9 L-11,9Z" fill="var(--red)"/></svg><span data-i18n="legend.irr">Titoli mancanti</span></li>
         </ul>
-        <p class="demo-note">Dimostrazione con dati inventati: i punti sono segnaposto e non corrispondono a opere reali. Trascina per spostarti e usa + e − per ingrandire. In alto a destra puoi passare dalla mappa fisica a quella stradale.</p>
+        <p class="demo-note" data-i18n="demo.note">Dimostrazione con dati inventati: i punti sono segnaposto e non corrispondono a opere reali. Trascina per spostarti e usa + e − per ingrandire. In alto a destra puoi passare dalla mappa fisica a quella stradale.</p>
       </div>
 
       <aside class="file-card" id="file" aria-live="polite">
@@ -242,110 +251,110 @@ footer p{margin:0}
 
     <section class="block" id="origine">
       <div class="two">
-        <h2>Il problema</h2>
+        <h2 data-i18n="origin.h">Il problema</h2>
         <div class="prose">
-          <p>Oggi sapere che cosa è stato autorizzato vicino a casa può richiedere anni di richieste a uffici diversi.</p>
-          <p>Nel frattempo un impianto può funzionare con rumori e vibrazioni pesanti per chi vive accanto, e solo alla fine emerge che i titoli necessari non risultano rilasciati.</p>
-          <p>I documenti sono sparsi in archivi diversi e il cittadino deve già sapere a chi chiederli. Questa proposta vuole cambiare questo.</p>
+          <p data-i18n="origin.p1">Oggi sapere che cosa è stato autorizzato vicino a casa può richiedere anni di richieste a uffici diversi.</p>
+          <p data-i18n="origin.p2">Nel frattempo un impianto può funzionare con rumori e vibrazioni pesanti per chi vive accanto, e solo alla fine emerge che i titoli necessari non risultano rilasciati.</p>
+          <p data-i18n="origin.p3">I documenti sono sparsi in archivi diversi e il cittadino deve già sapere a chi chiederli. Questa proposta vuole cambiare questo.</p>
         </div>
       </div>
     </section>
 
     <section class="block" id="proposta">
-      <h2>Una mappa per tutta l’Unione, fino al comune</h2>
-      <p class="prose">Una piattaforma pubblica europea in cui sono censite tutte le opere, gli impianti e le attività soggetti, o potenzialmente soggetti, a valutazioni, verifiche o autorizzazioni ambientali. Funzionerebbe così:</p>
+      <h2 data-i18n="prop.h">Una mappa per tutta l’Unione, fino al comune</h2>
+      <p class="prose" data-i18n="prop.intro">Una piattaforma pubblica europea in cui sono censite tutte le opere, gli impianti e le attività soggetti, o potenzialmente soggetti, a valutazioni, verifiche o autorizzazioni ambientali. Funzionerebbe così:</p>
       <div class="feat">
         <div>
-          <h3>Mappa a ogni scala</h3>
-          <p>Si consulta dall’intero territorio dell’Unione fino al singolo comune.</p>
+          <h3 data-i18n="feat.1.h">Mappa a ogni scala</h3>
+          <p data-i18n="feat.1.p">Si consulta dall’intero territorio dell’Unione fino al singolo comune.</p>
         </div>
         <div>
-          <h3>Un fascicolo per ogni opera</h3>
-          <p>Selezionando un’opera sulla mappa, chiunque può consultare e scaricare il suo fascicolo digitale con tutta la documentazione amministrativa e autorizzativa.</p>
+          <h3 data-i18n="feat.2.h">Un fascicolo per ogni opera</h3>
+          <p data-i18n="feat.2.p">Selezionando un’opera sulla mappa, chiunque può consultare e scaricare il suo fascicolo digitale con tutta la documentazione amministrativa e autorizzativa.</p>
         </div>
         <div>
-          <h3>Un codice europeo unico</h3>
-          <p>Ogni opera ha un codice identificativo e una scheda con posizione, soggetto responsabile, amministrazioni competenti, titoli richiesti e rilasciati, e stato.</p>
+          <h3 data-i18n="feat.3.h">Un codice europeo unico</h3>
+          <p data-i18n="feat.3.p">Ogni opera ha un codice identificativo e una scheda con posizione, soggetto responsabile, amministrazioni competenti, titoli richiesti e rilasciati, e stato.</p>
         </div>
         <div>
-          <h3>Anche ciò che manca</h3>
-          <p>Sono censite le opere con procedimenti in corso, quelle senza i titoli necessari o con irregolarità accertate, e gli esiti delle verifiche che stabiliscono che un’autorizzazione non serve.</p>
+          <h3 data-i18n="feat.4.h">Anche ciò che manca</h3>
+          <p data-i18n="feat.4.p">Sono censite le opere con procedimenti in corso, quelle senza i titoli necessari o con irregolarità accertate, e gli esiti delle verifiche che stabiliscono che un’autorizzazione non serve.</p>
         </div>
         <div>
-          <h3>Aggiornamento obbligatorio</h3>
-          <p>Le amministrazioni aggiornano il fascicolo a ogni rilascio, modifica, rinnovo, sospensione o revoca, e lo storico dei procedimenti resta consultabile.</p>
+          <h3 data-i18n="feat.5.h">Aggiornamento obbligatorio</h3>
+          <p data-i18n="feat.5.p">Le amministrazioni aggiornano il fascicolo a ogni rilascio, modifica, rinnovo, sospensione o revoca, e lo storico dei procedimenti resta consultabile.</p>
         </div>
         <div>
-          <h3>Ricerca senza conoscere l’ufficio</h3>
-          <p>Si cerca per territorio, indirizzo, tipo di attività o soggetto responsabile, senza dover sapere quale ufficio conserva i documenti.</p>
+          <h3 data-i18n="feat.6.h">Ricerca senza conoscere l’ufficio</h3>
+          <p data-i18n="feat.6.p">Si cerca per territorio, indirizzo, tipo di attività o soggetto responsabile, senza dover sapere quale ufficio conserva i documenti.</p>
         </div>
         <div>
-          <h3>Segnalazioni dei cittadini</h3>
-          <p>Chi trova un’opera non censita, o informazioni mancanti o non aggiornate, può segnalarlo. L’amministrazione competente verifica e risponde.</p>
+          <h3 data-i18n="feat.7.h">Segnalazioni dei cittadini</h3>
+          <p data-i18n="feat.7.p">Chi trova un’opera non censita, o informazioni mancanti o non aggiornate, può segnalarlo. L’amministrazione competente verifica e risponde.</p>
         </div>
         <div>
-          <h3>Regole comuni, competenze nazionali</h3>
-          <p>Criteri europei uniformi di classificazione, indicizzazione e pubblicazione, nel rispetto delle normative nazionali e delle competenze di ogni Stato.</p>
+          <h3 data-i18n="feat.8.h">Regole comuni, competenze nazionali</h3>
+          <p data-i18n="feat.8.p">Criteri europei uniformi di classificazione, indicizzazione e pubblicazione, nel rispetto delle normative nazionali e delle competenze di ogni Stato.</p>
         </div>
       </div>
     </section>
 
     <section class="block" id="fascicolo">
-      <h2>Che cosa conterrebbe il fascicolo</h2>
-      <p class="prose">In base al tipo di opera e alla normativa applicabile:</p>
+      <h2 data-i18n="file.h">Che cosa conterrebbe il fascicolo</h2>
+      <p class="prose" data-i18n="file.intro">In base al tipo di opera e alla normativa applicabile:</p>
       <ul class="docs">
-        <li>Valutazioni di impatto ambientale (VIA) e verifiche di assoggettabilità</li>
-        <li>Valutazioni ambientali strategiche (VAS) e valutazioni di incidenza ambientale (VIncA), dove pertinenti</li>
-        <li>Autorizzazioni integrate ambientali (AIA) e autorizzazioni alle emissioni</li>
-        <li>Titoli per il prelievo e l’utilizzo delle risorse idriche</li>
-        <li>Autorizzazioni agli scarichi e alla gestione delle acque</li>
-        <li>Autorizzazioni in materia di rifiuti</li>
-        <li>Autorizzazioni paesaggistiche e di tutela della natura e delle aree protette</li>
-        <li>Prescrizioni, controlli e dati di monitoraggio</li>
-        <li>Modifiche, rinnovi, sospensioni, revoche ed eventuali procedimenti di regolarizzazione</li>
+        <li data-i18n="doc.1">Valutazioni di impatto ambientale (VIA) e verifiche di assoggettabilità</li>
+        <li data-i18n="doc.2">Valutazioni ambientali strategiche (VAS) e valutazioni di incidenza ambientale (VIncA), dove pertinenti</li>
+        <li data-i18n="doc.3">Autorizzazioni integrate ambientali (AIA) e autorizzazioni alle emissioni</li>
+        <li data-i18n="doc.4">Titoli per il prelievo e l’utilizzo delle risorse idriche</li>
+        <li data-i18n="doc.5">Autorizzazioni agli scarichi e alla gestione delle acque</li>
+        <li data-i18n="doc.6">Autorizzazioni in materia di rifiuti</li>
+        <li data-i18n="doc.7">Autorizzazioni paesaggistiche e di tutela della natura e delle aree protette</li>
+        <li data-i18n="doc.8">Prescrizioni, controlli e dati di monitoraggio</li>
+        <li data-i18n="doc.9">Modifiche, rinnovi, sospensioni, revoche ed eventuali procedimenti di regolarizzazione</li>
       </ul>
     </section>
 
     <section class="block" id="benefici">
-      <h2>Cosa cambia per cittadini e amministrazioni</h2>
+      <h2 data-i18n="ben.h">Cosa cambia per cittadini e amministrazioni</h2>
       <div class="compare">
         <div>
-          <h3>Per i cittadini</h3>
-          <p>Conoscere subito la situazione ambientale e autorizzativa delle opere sul proprio territorio, comprese eventuali carenze o irregolarità, senza ripetute richieste di documenti a uffici diversi.</p>
+          <h3 data-i18n="ben.cit.h">Per i cittadini</h3>
+          <p data-i18n="ben.cit.p">Conoscere subito la situazione ambientale e autorizzativa delle opere sul proprio territorio, comprese eventuali carenze o irregolarità, senza ripetute richieste di documenti a uffici diversi.</p>
         </div>
         <div>
-          <h3>Per le amministrazioni</h3>
-          <p>Uno strumento di semplificazione, collaborazione e controllo, che riduce la frammentazione degli archivi e i tempi di ricerca.</p>
+          <h3 data-i18n="ben.adm.h">Per le amministrazioni</h3>
+          <p data-i18n="ben.adm.p">Uno strumento di semplificazione, collaborazione e controllo, che riduce la frammentazione degli archivi e i tempi di ricerca.</p>
         </div>
       </div>
     </section>
 
     <section class="block" id="esistente">
       <div class="two">
-        <h2>Si parte da ciò che esiste già</h2>
+        <h2 data-i18n="ex.h">Si parte da ciò che esiste già</h2>
         <div class="prose">
-          <p>L’Unione europea dispone già di strumenti sull’informazione territoriale e ambientale, tra cui INSPIRE e il Portale europeo sulle emissioni industriali.</p>
-          <p>La proposta non li sostituisce: li integra in un sistema che permette di individuare ogni singola opera e di consultarne l’intero fascicolo amministrativo e autorizzativo.</p>
+          <p data-i18n="ex.p1">L’Unione europea dispone già di strumenti sull’informazione territoriale e ambientale, tra cui INSPIRE e il Portale europeo sulle emissioni industriali.</p>
+          <p data-i18n="ex.p2">La proposta non li sostituisce: li integra in un sistema che permette di individuare ogni singola opera e di consultarne l’intero fascicolo amministrativo e autorizzativo.</p>
         </div>
       </div>
     </section>
 
     <section class="block" id="richiesta">
       <div class="ask">
-        <h2>La richiesta alle istituzioni</h2>
-        <p>La proposta si rivolge a Ministero dell’Ambiente e della Sicurezza Energetica, Camera dei deputati, Senato della Repubblica, Presidenza della Repubblica, Commissione europea (DG Ambiente) e Parlamento europeo (commissioni ENVI e PETI, deputati italiani e Ufficio di collegamento in Italia).</p>
-        <p>L’Italia può promuovere questa iniziativa normativa, ma la proposta può essere valutata anche direttamente a livello europeo, indipendentemente da un eventuale ruolo formale dell’Italia.</p>
-        <p>Si chiede che venga presa in considerazione a livello nazionale ed europeo, nell’interesse della trasparenza amministrativa, della tutela ambientale e del diritto dei cittadini all’informazione.</p>
+        <h2 data-i18n="req.h">La richiesta alle istituzioni</h2>
+        <p data-i18n="req.p1">La proposta si rivolge a Ministero dell’Ambiente e della Sicurezza Energetica, Camera dei deputati, Senato della Repubblica, Presidenza della Repubblica, Commissione europea (DG Ambiente) e Parlamento europeo (commissioni ENVI e PETI, deputati italiani e Ufficio di collegamento in Italia).</p>
+        <p data-i18n="req.p2">L’Italia può promuovere questa iniziativa normativa, ma la proposta può essere valutata anche direttamente a livello europeo, indipendentemente da un eventuale ruolo formale dell’Italia.</p>
+        <p data-i18n="req.p3">Si chiede che venga presa in considerazione a livello nazionale ed europeo, nell’interesse della trasparenza amministrativa, della tutela ambientale e del diritto dei cittadini all’informazione.</p>
       </div>
     </section>
 
     <section class="block" id="contribuisci">
       <div class="two">
-        <h2>Contribuisci</h2>
+        <h2 data-i18n="con.h">Contribuisci</h2>
         <div class="prose">
-          <p>Questo è un prototipo aperto: la mappa e i dati che vedi sono dimostrativi. Servono persone che sappiano programmare, lavorare con i dati ambientali e territoriali o conoscano i procedimenti amministrativi.</p>
-          <p>Il codice è pubblico. Puoi leggere l’elenco delle cose da fare, proporre un’idea o segnalare un problema.</p>
-          <a class="btn" href="https://github.com/nalomb2009/eia-sea-atlas" target="_blank" rel="noopener">Vai al codice su GitHub</a>
+          <p data-i18n="con.p1">Questo è un prototipo aperto: la mappa e i dati che vedi sono dimostrativi. Servono persone che sappiano programmare, lavorare con i dati ambientali e territoriali o conoscano i procedimenti amministrativi.</p>
+          <p data-i18n="con.p2">Il codice è pubblico. Puoi leggere l’elenco delle cose da fare, proporre un’idea o segnalare un problema.</p>
+          <a class="btn" href="https://github.com/nalomb2009/eia-sea-atlas" target="_blank" rel="noopener" data-i18n="con.btn">Vai al codice su GitHub</a>
         </div>
       </div>
     </section>
@@ -355,75 +364,639 @@ footer p{margin:0}
 
 <footer>
   <div class="wrap">
-    <p>EIA-SEA Atlas – proposta di iniziativa normativa nazionale ed europea. Prototipo con dati inventati.</p>
+    <p data-i18n="foot.p">EIA-SEA Atlas – proposta di iniziativa normativa nazionale ed europea. Prototipo con dati inventati.</p>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
 (function(){
+  var DICT = {
+ "en": {
+  "nav.problem": "The problem",
+  "nav.proposal": "The proposal",
+  "nav.file": "The file",
+  "nav.change": "What changes",
+  "nav.request": "The request",
+  "nav.contribute": "Contribute",
+  "lang.label": "Language",
+  "hero.title": "What is near your home, and with which permits?",
+  "hero.lead": "A proposal for a public European map in which every work and every plant has its own digital file: anyone can open, read and download it.",
+  "hero.note": "EIA and SEA stand for Environmental Impact Assessment and Strategic Environmental Assessment (VIA and VAS in Italy).",
+  "scale.group": "Map scale",
+  "scale.eu": "European Union",
+  "scale.country": "Country",
+  "scale.municipality": "Municipality",
+  "map.aria": "Demonstration map with works and plants",
+  "fb.aria": "Schematic demonstration map with works and plants",
+  "fb.note": "This is a schematic map: the detailed map did not load. Opening the page in a browser with an active internet connection shows the real map, physical or street, down to municipal level.",
+  "fb.link": "Open this area on OpenStreetMap",
+  "legend.aria": "Legend",
+  "legend.ok": "Permits in order",
+  "legend.proc": "Procedure under way",
+  "legend.irr": "Permits missing",
+  "demo.note": "Demonstration with invented data: the points are placeholders and do not correspond to real works. Drag to move around and use + and − to zoom. At the top right you can switch from the physical map to the street map.",
+  "origin.h": "The problem",
+  "origin.p1": "Today, finding out what has been authorised near your home can take years of requests to different offices.",
+  "origin.p2": "Meanwhile a plant may operate with heavy noise and vibration for those living next to it, and only in the end does it emerge that the necessary permits were never issued.",
+  "origin.p3": "Documents are scattered across different archives and citizens must already know whom to ask. This proposal aims to change that.",
+  "prop.h": "One map for the whole Union, down to the municipality",
+  "prop.intro": "A public European platform that lists all works, plants and activities subject, or potentially subject, to environmental assessments, checks or authorisations. It would work like this:",
+  "feat.1.h": "A map at every scale",
+  "feat.1.p": "Browse it from the whole territory of the Union down to a single municipality.",
+  "feat.2.h": "A file for every work",
+  "feat.2.p": "By selecting a work on the map, anyone can view and download its digital file with all the administrative and permitting documents.",
+  "feat.3.h": "A single European code",
+  "feat.3.p": "Every work has an identification code and a record with its location, responsible party, competent authorities, permits required and issued, and status.",
+  "feat.4.h": "Also what is missing",
+  "feat.4.p": "The register includes works with procedures under way, works without the necessary permits or with confirmed irregularities, and the outcomes of checks finding that an authorisation is not needed.",
+  "feat.5.h": "Mandatory updates",
+  "feat.5.p": "Authorities update the file at every issue, change, renewal, suspension or revocation, and the history of procedures remains available.",
+  "feat.6.h": "Search without knowing the office",
+  "feat.6.p": "Search by area, address, type of activity or responsible party, without having to know which office holds the documents.",
+  "feat.7.h": "Reports from citizens",
+  "feat.7.p": "Anyone who finds a work that is not listed, or missing or outdated information, can report it. The competent authority checks and replies.",
+  "feat.8.h": "Common rules, national competences",
+  "feat.8.p": "Uniform European criteria for classification, indexing and publication, respecting national legislation and the competences of each Member State.",
+  "file.h": "What the file would contain",
+  "file.intro": "Depending on the type of work and the applicable legislation:",
+  "doc.1": "Environmental impact assessments (EIA) and screening decisions",
+  "doc.2": "Strategic environmental assessments (SEA) and appropriate assessments (Habitats Directive), where relevant",
+  "doc.3": "Integrated environmental permits (IPPC/IED) and emission permits",
+  "doc.4": "Permits for the abstraction and use of water resources",
+  "doc.5": "Discharge permits and water management authorisations",
+  "doc.6": "Waste management permits",
+  "doc.7": "Landscape authorisations and permits for nature protection and protected areas",
+  "doc.8": "Requirements, inspections and monitoring data",
+  "doc.9": "Changes, renewals, suspensions, revocations and any regularisation procedures",
+  "ben.h": "What changes for citizens and authorities",
+  "ben.cit.h": "For citizens",
+  "ben.cit.p": "Immediate knowledge of the environmental and permitting status of works in their area, including any shortcomings or irregularities, without repeated document requests to different offices.",
+  "ben.adm.h": "For authorities",
+  "ben.adm.p": "A tool for simplification, cooperation and control, reducing the fragmentation of archives and search times.",
+  "ex.h": "Starting from what already exists",
+  "ex.p1": "The European Union already has tools for spatial and environmental information, including INSPIRE and the European Industrial Emissions Portal.",
+  "ex.p2": "The proposal does not replace them: it integrates them in a system that identifies each single work and gives access to its entire administrative and permitting file.",
+  "req.h": "The request to the institutions",
+  "req.p1": "The proposal is addressed to the Italian Ministry of Environment and Energy Security, the Chamber of Deputies, the Senate of the Republic, the Presidency of the Republic, the European Commission (DG Environment) and the European Parliament (ENVI and PETI committees, Italian MEPs and the Liaison Office in Italy).",
+  "req.p2": "Italy can promote this legislative initiative, but the proposal can also be assessed directly at European level, regardless of any formal role of Italy.",
+  "req.p3": "It is requested that it be taken into consideration at national and European level, in the interest of administrative transparency, environmental protection and citizens’ right to information.",
+  "con.h": "Contribute",
+  "con.p1": "This is an open prototype: the map and the data you see are demonstrative. We need people who can program, work with environmental and spatial data, or know administrative procedures.",
+  "con.p2": "The code is public. You can read the to-do list, propose an idea or report a problem.",
+  "con.btn": "Go to the code on GitHub",
+  "foot.p": "EIA-SEA Atlas – proposal for a national and European legislative initiative. Prototype with invented data.",
+  "js.meta.title": "EIA-SEA Atlas – public European map of environmental permits",
+  "js.meta.desc": "Every work and plant with its environmental and permitting file, open to all: from the European Union down to the municipality. Open prototype for those who want to contribute.",
+  "js.s.ok": "Permits in order",
+  "js.s.proc": "Procedure under way",
+  "js.s.irr": "Permits missing",
+  "js.ts.rel": "Issued",
+  "js.ts.pend": "In progress",
+  "js.ts.miss": "No record of issue",
+  "js.c.code": "Code",
+  "js.c.pos": "Location",
+  "js.c.resp": "Responsible party",
+  "js.c.comp": "Competent authorities",
+  "js.c.respval": "Sample company",
+  "js.c.compval": "Region, municipality and environmental authority",
+  "js.c.titles": "Required permits and status",
+  "js.c.empty": "Choose a point on the map to open the file for that work.",
+  "js.cap.ue": "European view: one point per work or group of works.",
+  "js.cap.paese": "National view: the works of a whole country.",
+  "js.cap.comune": "Municipal view: every work in the area.",
+  "js.l.fisica": "Physical map",
+  "js.l.stradale": "Street map",
+  "js.tpl.ind": "Industrial plant",
+  "js.tpl.rif": "Waste management plant",
+  "js.tpl.idrico": "Water abstraction works",
+  "js.tpl.energia": "Energy plant",
+  "js.t.aia": "Integrated environmental permit (AIA)",
+  "js.t.emissioni": "Air emissions permit",
+  "js.t.scarichi": "Discharge permit",
+  "js.t.assogg": "EIA screening",
+  "js.t.via": "Environmental impact assessment (EIA)",
+  "js.t.rifiuti": "Waste management permit",
+  "js.t.paesaggistica": "Landscape authorisation",
+  "js.t.prelievo": "Water abstraction licence",
+  "js.t.vinca": "Appropriate assessment (Habitats Directive)",
+  "js.t.monitoraggio": "Monitoring plan",
+  "js.place.fr": "Industrial area, France",
+  "js.place.de": "Industrial zone, Germany",
+  "js.place.pl": "Energy site, Poland",
+  "js.place.es": "River basin, Spain",
+  "js.place.it": "Industrial area, Italy",
+  "js.place.fi": "Energy site, Finland",
+  "js.place.nord": "Northern Italy, sample area",
+  "js.place.centro": "Central Italy, sample area",
+  "js.place.sud": "Southern Italy, sample area",
+  "js.place.sicilia": "Sicily, sample area",
+  "js.place.via1": "Sample street 1",
+  "js.place.loc2": "Sample locality 2",
+  "js.place.via3": "Sample street 3, near homes",
+  "js.place.contrada4": "Sample district 4",
+  "js.place.zona5": "Sample industrial zone 5",
+  "nav.aria": "Sections",
+  "demo.aria": "Map demonstration"
+ },
+ "es": {
+  "nav.problem": "El problema",
+  "nav.proposal": "La propuesta",
+  "nav.file": "El expediente",
+  "nav.change": "Qué cambia",
+  "nav.request": "La solicitud",
+  "nav.contribute": "Colabora",
+  "lang.label": "Idioma",
+  "hero.title": "¿Qué hay cerca de tu casa y con qué autorizaciones?",
+  "hero.lead": "Una propuesta de mapa público europeo en el que cada obra e instalación tiene su expediente digital: cualquiera puede abrirlo, leerlo y descargarlo.",
+  "hero.note": "EIA y SEA son las siglas inglesas de la evaluación de impacto ambiental y de la evaluación ambiental estratégica (VIA y VAS en Italia).",
+  "scale.group": "Escala del mapa",
+  "scale.eu": "Unión Europea",
+  "scale.country": "País",
+  "scale.municipality": "Municipio",
+  "map.aria": "Mapa de demostración con obras e instalaciones",
+  "fb.aria": "Mapa esquemático de demostración con obras e instalaciones",
+  "fb.note": "Este es un mapa esquemático: el mapa detallado no se ha cargado. Si abres la página en un navegador con conexión a internet verás el mapa real, físico o de calles, hasta el nivel municipal.",
+  "fb.link": "Abrir esta zona en OpenStreetMap",
+  "legend.aria": "Leyenda",
+  "legend.ok": "Autorizaciones en regla",
+  "legend.proc": "Procedimiento en curso",
+  "legend.irr": "Faltan autorizaciones",
+  "demo.note": "Demostración con datos inventados: los puntos son marcadores de posición y no corresponden a obras reales. Arrastra para moverte y usa + y − para ampliar. Arriba a la derecha puedes pasar del mapa físico al mapa de calles.",
+  "origin.h": "El problema",
+  "origin.p1": "Hoy, saber qué se ha autorizado cerca de casa puede exigir años de solicitudes a oficinas distintas.",
+  "origin.p2": "Mientras tanto, una instalación puede funcionar con ruidos y vibraciones intensos para quienes viven al lado, y solo al final se descubre que no constan las autorizaciones necesarias.",
+  "origin.p3": "Los documentos están dispersos en archivos diferentes y la ciudadanía ya tiene que saber a quién pedirlos. Esta propuesta quiere cambiarlo.",
+  "prop.h": "Un mapa para toda la Unión, hasta el municipio",
+  "prop.intro": "Una plataforma pública europea en la que se registran todas las obras, instalaciones y actividades sujetas, o potencialmente sujetas, a evaluaciones, verificaciones o autorizaciones ambientales. Funcionaría así:",
+  "feat.1.h": "Mapa a todas las escalas",
+  "feat.1.p": "Se consulta desde todo el territorio de la Unión hasta un solo municipio.",
+  "feat.2.h": "Un expediente por cada obra",
+  "feat.2.p": "Al seleccionar una obra en el mapa, cualquiera puede consultar y descargar su expediente digital con toda la documentación administrativa y de autorizaciones.",
+  "feat.3.h": "Un código europeo único",
+  "feat.3.p": "Cada obra tiene un código de identificación y una ficha con su ubicación, la persona o entidad responsable, las administraciones competentes, las autorizaciones exigidas y concedidas, y su estado.",
+  "feat.4.h": "También lo que falta",
+  "feat.4.p": "Se registran las obras con procedimientos en curso, las que carecen de las autorizaciones necesarias o tienen irregularidades comprobadas, y los resultados de las verificaciones que determinan que una autorización no es necesaria.",
+  "feat.5.h": "Actualización obligatoria",
+  "feat.5.p": "Las administraciones actualizan el expediente con cada concesión, modificación, renovación, suspensión o revocación, y el historial de los procedimientos sigue siendo consultable.",
+  "feat.6.h": "Búsqueda sin conocer la oficina",
+  "feat.6.p": "Se busca por territorio, dirección, tipo de actividad o responsable, sin tener que saber qué oficina conserva los documentos.",
+  "feat.7.h": "Avisos de la ciudadanía",
+  "feat.7.p": "Quien encuentre una obra no registrada, o información que falta o está desactualizada, puede comunicarlo. La administración competente lo comprueba y responde.",
+  "feat.8.h": "Reglas comunes, competencias nacionales",
+  "feat.8.p": "Criterios europeos uniformes de clasificación, indexación y publicación, respetando las normativas nacionales y las competencias de cada Estado.",
+  "file.h": "Qué contendría el expediente",
+  "file.intro": "Según el tipo de obra y la normativa aplicable:",
+  "doc.1": "Evaluaciones de impacto ambiental (EIA) y decisiones de sometimiento a evaluación",
+  "doc.2": "Evaluaciones ambientales estratégicas (EAE) y evaluaciones de repercusiones sobre la Red Natura 2000 (Directiva Hábitats), cuando proceda",
+  "doc.3": "Autorizaciones ambientales integradas (AAI) y autorizaciones de emisiones",
+  "doc.4": "Títulos para la captación y el uso de los recursos hídricos",
+  "doc.5": "Autorizaciones de vertidos y de gestión del agua",
+  "doc.6": "Autorizaciones en materia de residuos",
+  "doc.7": "Autorizaciones paisajísticas y de protección de la naturaleza y de las áreas protegidas",
+  "doc.8": "Condicionados, controles y datos de seguimiento",
+  "doc.9": "Modificaciones, renovaciones, suspensiones, revocaciones y eventuales procedimientos de regularización",
+  "ben.h": "Qué cambia para la ciudadanía y las administraciones",
+  "ben.cit.h": "Para la ciudadanía",
+  "ben.cit.p": "Conocer de inmediato la situación ambiental y de autorizaciones de las obras de su territorio, incluidas posibles carencias o irregularidades, sin repetidas solicitudes de documentos a oficinas distintas.",
+  "ben.adm.h": "Para las administraciones",
+  "ben.adm.p": "Una herramienta de simplificación, colaboración y control, que reduce la fragmentación de los archivos y los tiempos de búsqueda.",
+  "ex.h": "Partimos de lo que ya existe",
+  "ex.p1": "La Unión Europea ya dispone de herramientas de información territorial y ambiental, entre ellas INSPIRE y el Portal Europeo de Emisiones Industriales.",
+  "ex.p2": "La propuesta no las sustituye: las integra en un sistema que permite identificar cada obra y consultar su expediente administrativo y de autorizaciones completo.",
+  "req.h": "La solicitud a las instituciones",
+  "req.p1": "La propuesta va dirigida al Ministerio del Medio Ambiente y de la Seguridad Energética de Italia, la Cámara de Diputados, el Senado de la República, la Presidencia de la República, la Comisión Europea (DG de Medio Ambiente) y el Parlamento Europeo (comisiones ENVI y PETI, eurodiputados italianos y Oficina de Enlace en Italia).",
+  "req.p2": "Italia puede promover esta iniciativa normativa, pero la propuesta también puede evaluarse directamente a escala europea, con independencia de un eventual papel formal de Italia.",
+  "req.p3": "Se solicita que se tenga en consideración a escala nacional y europea, en interés de la transparencia administrativa, la protección del medio ambiente y el derecho de la ciudadanía a la información.",
+  "con.h": "Colabora",
+  "con.p1": "Este es un prototipo abierto: el mapa y los datos que ves son de demostración. Se necesitan personas que sepan programar, trabajar con datos ambientales y territoriales o conozcan los procedimientos administrativos.",
+  "con.p2": "El código es público. Puedes leer la lista de tareas, proponer una idea o comunicar un problema.",
+  "con.btn": "Ir al código en GitHub",
+  "foot.p": "EIA-SEA Atlas – propuesta de iniciativa normativa nacional y europea. Prototipo con datos inventados.",
+  "js.meta.title": "EIA-SEA Atlas – mapa público europeo de autorizaciones ambientales",
+  "js.meta.desc": "Cada obra e instalación con su expediente ambiental y de autorizaciones, consultable por todos: de la Unión Europea al municipio. Prototipo abierto para quien quiera colaborar.",
+  "js.s.ok": "Autorizaciones en regla",
+  "js.s.proc": "Procedimiento en curso",
+  "js.s.irr": "Faltan autorizaciones",
+  "js.ts.rel": "Concedida",
+  "js.ts.pend": "En trámite",
+  "js.ts.miss": "No consta concedida",
+  "js.c.code": "Código",
+  "js.c.pos": "Ubicación",
+  "js.c.resp": "Responsable",
+  "js.c.comp": "Competentes",
+  "js.c.respval": "Empresa de ejemplo",
+  "js.c.compval": "Región, municipio y autoridad ambiental",
+  "js.c.titles": "Autorizaciones exigidas y estado",
+  "js.c.empty": "Elige un punto en el mapa para abrir el expediente de la obra.",
+  "js.cap.ue": "Vista europea: un punto por obra o grupo de obras.",
+  "js.cap.paese": "Vista nacional: las obras de todo un país.",
+  "js.cap.comune": "Vista municipal: cada obra del territorio.",
+  "js.l.fisica": "Mapa físico",
+  "js.l.stradale": "Mapa de calles",
+  "js.tpl.ind": "Instalación industrial",
+  "js.tpl.rif": "Instalación de gestión de residuos",
+  "js.tpl.idrico": "Obra de captación de agua",
+  "js.tpl.energia": "Instalación energética",
+  "js.t.aia": "Autorización ambiental integrada (AAI)",
+  "js.t.emissioni": "Emisiones a la atmósfera",
+  "js.t.scarichi": "Autorización de vertidos",
+  "js.t.assogg": "Decisión de sometimiento a EIA",
+  "js.t.via": "Evaluación de impacto ambiental (EIA)",
+  "js.t.rifiuti": "Autorización de residuos",
+  "js.t.paesaggistica": "Autorización paisajística",
+  "js.t.prelievo": "Concesión de captación de agua",
+  "js.t.vinca": "Evaluación de repercusiones (Directiva Hábitats)",
+  "js.t.monitoraggio": "Plan de seguimiento",
+  "js.place.fr": "Zona industrial, Francia",
+  "js.place.de": "Zona productiva, Alemania",
+  "js.place.pl": "Zona energética, Polonia",
+  "js.place.es": "Cuenca fluvial, España",
+  "js.place.it": "Zona industrial, Italia",
+  "js.place.fi": "Zona energética, Finlandia",
+  "js.place.nord": "Norte de Italia, zona de ejemplo",
+  "js.place.centro": "Centro de Italia, zona de ejemplo",
+  "js.place.sud": "Sur de Italia, zona de ejemplo",
+  "js.place.sicilia": "Sicilia, zona de ejemplo",
+  "js.place.via1": "Calle de ejemplo 1",
+  "js.place.loc2": "Localidad de ejemplo 2",
+  "js.place.via3": "Calle de ejemplo 3, cerca de viviendas",
+  "js.place.contrada4": "Paraje de ejemplo 4",
+  "js.place.zona5": "Zona productiva de ejemplo 5",
+  "nav.aria": "Secciones",
+  "demo.aria": "Demostración del mapa"
+ },
+ "fr": {
+  "nav.problem": "Le problème",
+  "nav.proposal": "La proposition",
+  "nav.file": "Le dossier",
+  "nav.change": "Ce qui change",
+  "nav.request": "La demande",
+  "nav.contribute": "Contribuer",
+  "lang.label": "Langue",
+  "hero.title": "Qu’y a-t-il près de chez vous, et avec quelles autorisations ?",
+  "hero.lead": "Une proposition de carte publique européenne où chaque ouvrage et chaque installation a son dossier numérique : chacun peut l’ouvrir, le lire et le télécharger.",
+  "hero.note": "EIA et SEA sont les sigles anglais de l’évaluation des incidences sur l’environnement et de l’évaluation environnementale stratégique (VIA et VAS en Italie).",
+  "scale.group": "Échelle de la carte",
+  "scale.eu": "Union européenne",
+  "scale.country": "Pays",
+  "scale.municipality": "Commune",
+  "map.aria": "Carte de démonstration avec ouvrages et installations",
+  "fb.aria": "Carte schématique de démonstration avec ouvrages et installations",
+  "fb.note": "Ceci est une carte schématique : la carte détaillée ne s’est pas chargée. En ouvrant la page dans un navigateur avec une connexion internet active, vous verrez la vraie carte, physique ou routière, jusqu’au niveau communal.",
+  "fb.link": "Ouvrir cette zone sur OpenStreetMap",
+  "legend.aria": "Légende",
+  "legend.ok": "Autorisations en règle",
+  "legend.proc": "Procédure en cours",
+  "legend.irr": "Autorisations manquantes",
+  "demo.note": "Démonstration avec des données inventées : les points sont des repères fictifs et ne correspondent pas à des ouvrages réels. Faites glisser pour vous déplacer et utilisez + et − pour zoomer. En haut à droite, vous pouvez passer de la carte physique à la carte routière.",
+  "origin.h": "Le problème",
+  "origin.p1": "Aujourd’hui, savoir ce qui a été autorisé près de chez soi peut demander des années de démarches auprès de services différents.",
+  "origin.p2": "Pendant ce temps, une installation peut fonctionner avec un bruit et des vibrations importants pour ses voisins, et ce n’est qu’à la fin qu’on découvre que les autorisations nécessaires n’ont pas été délivrées.",
+  "origin.p3": "Les documents sont dispersés dans des archives différentes et le citoyen doit déjà savoir à qui les demander. Cette proposition veut changer cela.",
+  "prop.h": "Une carte pour toute l’Union, jusqu’à la commune",
+  "prop.intro": "Une plateforme publique européenne qui recense tous les ouvrages, installations et activités soumis, ou susceptibles d’être soumis, à des évaluations, vérifications ou autorisations environnementales. Elle fonctionnerait ainsi :",
+  "feat.1.h": "Une carte à toutes les échelles",
+  "feat.1.p": "On la consulte depuis l’ensemble du territoire de l’Union jusqu’à une seule commune.",
+  "feat.2.h": "Un dossier pour chaque ouvrage",
+  "feat.2.p": "En sélectionnant un ouvrage sur la carte, chacun peut consulter et télécharger son dossier numérique avec toute la documentation administrative et d’autorisation.",
+  "feat.3.h": "Un code européen unique",
+  "feat.3.p": "Chaque ouvrage a un code d’identification et une fiche indiquant sa localisation, le responsable, les administrations compétentes, les autorisations requises et délivrées, et son état.",
+  "feat.4.h": "Aussi ce qui manque",
+  "feat.4.p": "Sont recensés les ouvrages dont les procédures sont en cours, ceux qui n’ont pas les autorisations nécessaires ou présentent des irrégularités constatées, ainsi que les résultats des vérifications établissant qu’une autorisation n’est pas nécessaire.",
+  "feat.5.h": "Mise à jour obligatoire",
+  "feat.5.p": "Les administrations mettent à jour le dossier à chaque délivrance, modification, renouvellement, suspension ou révocation, et l’historique des procédures reste consultable.",
+  "feat.6.h": "Recherche sans connaître le service",
+  "feat.6.p": "On recherche par territoire, adresse, type d’activité ou responsable, sans avoir à savoir quel service conserve les documents.",
+  "feat.7.h": "Signalements des citoyens",
+  "feat.7.p": "Quiconque trouve un ouvrage non recensé, ou des informations manquantes ou obsolètes, peut le signaler. L’administration compétente vérifie et répond.",
+  "feat.8.h": "Règles communes, compétences nationales",
+  "feat.8.p": "Critères européens uniformes de classification, d’indexation et de publication, dans le respect des législations nationales et des compétences de chaque État.",
+  "file.h": "Ce que contiendrait le dossier",
+  "file.intro": "Selon le type d’ouvrage et la réglementation applicable :",
+  "doc.1": "Évaluations des incidences sur l’environnement (EIE) et décisions d’examen au cas par cas",
+  "doc.2": "Évaluations environnementales stratégiques (EES) et évaluations des incidences Natura 2000 (directive Habitats), le cas échéant",
+  "doc.3": "Autorisations environnementales intégrées (AIA) et autorisations d’émissions",
+  "doc.4": "Titres pour le prélèvement et l’utilisation des ressources en eau",
+  "doc.5": "Autorisations de rejets et de gestion de l’eau",
+  "doc.6": "Autorisations en matière de déchets",
+  "doc.7": "Autorisations paysagères et de protection de la nature et des espaces protégés",
+  "doc.8": "Prescriptions, contrôles et données de suivi",
+  "doc.9": "Modifications, renouvellements, suspensions, révocations et éventuelles procédures de régularisation",
+  "ben.h": "Ce qui change pour les citoyens et les administrations",
+  "ben.cit.h": "Pour les citoyens",
+  "ben.cit.p": "Connaître immédiatement la situation environnementale et d’autorisation des ouvrages de son territoire, y compris d’éventuelles lacunes ou irrégularités, sans demandes répétées de documents à des services différents.",
+  "ben.adm.h": "Pour les administrations",
+  "ben.adm.p": "Un outil de simplification, de collaboration et de contrôle, qui réduit la fragmentation des archives et les temps de recherche.",
+  "ex.h": "On part de ce qui existe déjà",
+  "ex.p1": "L’Union européenne dispose déjà d’outils d’information territoriale et environnementale, dont INSPIRE et le Portail européen des émissions industrielles.",
+  "ex.p2": "La proposition ne les remplace pas : elle les intègre dans un système qui permet d’identifier chaque ouvrage et de consulter l’ensemble de son dossier administratif et d’autorisation.",
+  "req.h": "La demande aux institutions",
+  "req.p1": "La proposition s’adresse au ministère italien de l’Environnement et de la Sécurité énergétique, à la Chambre des députés, au Sénat de la République, à la Présidence de la République, à la Commission européenne (DG Environnement) et au Parlement européen (commissions ENVI et PETI, députés européens italiens et Bureau de liaison en Italie).",
+  "req.p2": "L’Italie peut promouvoir cette initiative normative, mais la proposition peut aussi être examinée directement au niveau européen, indépendamment d’un éventuel rôle formel de l’Italie.",
+  "req.p3": "Il est demandé qu’elle soit prise en considération aux niveaux national et européen, dans l’intérêt de la transparence administrative, de la protection de l’environnement et du droit des citoyens à l’information.",
+  "con.h": "Contribuer",
+  "con.p1": "Ceci est un prototype ouvert : la carte et les données que vous voyez sont des démonstrations. Nous avons besoin de personnes qui savent programmer, travailler avec des données environnementales et territoriales, ou connaissent les procédures administratives.",
+  "con.p2": "Le code est public. Vous pouvez lire la liste des tâches, proposer une idée ou signaler un problème.",
+  "con.btn": "Aller au code sur GitHub",
+  "foot.p": "EIA-SEA Atlas – proposition d’initiative normative nationale et européenne. Prototype avec des données inventées.",
+  "js.meta.title": "EIA-SEA Atlas – carte publique européenne des autorisations environnementales",
+  "js.meta.desc": "Chaque ouvrage et installation avec son dossier environnemental et d’autorisation, consultable par tous : de l’Union européenne à la commune. Prototype ouvert à qui veut contribuer.",
+  "js.s.ok": "Autorisations en règle",
+  "js.s.proc": "Procédure en cours",
+  "js.s.irr": "Autorisations manquantes",
+  "js.ts.rel": "Délivrée",
+  "js.ts.pend": "En cours",
+  "js.ts.miss": "Aucune délivrance constatée",
+  "js.c.code": "Code",
+  "js.c.pos": "Localisation",
+  "js.c.resp": "Responsable",
+  "js.c.comp": "Compétents",
+  "js.c.respval": "Société d’exemple",
+  "js.c.compval": "Région, commune et autorité environnementale",
+  "js.c.titles": "Autorisations requises et état",
+  "js.c.empty": "Choisissez un point sur la carte pour ouvrir le dossier de l’ouvrage.",
+  "js.cap.ue": "Vue européenne : un point par ouvrage ou groupe d’ouvrages.",
+  "js.cap.paese": "Vue nationale : les ouvrages d’un pays entier.",
+  "js.cap.comune": "Vue communale : chaque ouvrage du territoire.",
+  "js.l.fisica": "Carte physique",
+  "js.l.stradale": "Carte routière",
+  "js.tpl.ind": "Installation industrielle",
+  "js.tpl.rif": "Installation de gestion des déchets",
+  "js.tpl.idrico": "Ouvrage de prélèvement d’eau",
+  "js.tpl.energia": "Installation énergétique",
+  "js.t.aia": "Autorisation environnementale intégrée (AIA)",
+  "js.t.emissioni": "Émissions dans l’air",
+  "js.t.scarichi": "Autorisation de rejets",
+  "js.t.assogg": "Examen au cas par cas (EIE)",
+  "js.t.via": "Évaluation des incidences sur l’environnement (EIE)",
+  "js.t.rifiuti": "Autorisation en matière de déchets",
+  "js.t.paesaggistica": "Autorisation paysagère",
+  "js.t.prelievo": "Autorisation de prélèvement d’eau",
+  "js.t.vinca": "Évaluation des incidences Natura 2000 (directive Habitats)",
+  "js.t.monitoraggio": "Plan de suivi",
+  "js.place.fr": "Zone industrielle, France",
+  "js.place.de": "Zone d’activités, Allemagne",
+  "js.place.pl": "Site énergétique, Pologne",
+  "js.place.es": "Bassin fluvial, Espagne",
+  "js.place.it": "Zone industrielle, Italie",
+  "js.place.fi": "Site énergétique, Finlande",
+  "js.place.nord": "Nord de l’Italie, zone d’exemple",
+  "js.place.centro": "Centre de l’Italie, zone d’exemple",
+  "js.place.sud": "Sud de l’Italie, zone d’exemple",
+  "js.place.sicilia": "Sicile, zone d’exemple",
+  "js.place.via1": "Rue d’exemple 1",
+  "js.place.loc2": "Lieu-dit d’exemple 2",
+  "js.place.via3": "Rue d’exemple 3, près d’habitations",
+  "js.place.contrada4": "Quartier d’exemple 4",
+  "js.place.zona5": "Zone d’activités d’exemple 5",
+  "nav.aria": "Sections",
+  "demo.aria": "Démonstration de la carte"
+ },
+ "pt": {
+  "nav.problem": "O problema",
+  "nav.proposal": "A proposta",
+  "nav.file": "O processo",
+  "nav.change": "O que muda",
+  "nav.request": "O pedido",
+  "nav.contribute": "Contribuir",
+  "lang.label": "Idioma",
+  "hero.title": "O que há perto da sua casa e com que autorizações?",
+  "hero.lead": "Uma proposta de mapa público europeu em que cada obra e cada instalação tem o seu processo digital: qualquer pessoa o pode abrir, ler e descarregar.",
+  "hero.note": "EIA e SEA são as siglas inglesas da avaliação de impacte ambiental e da avaliação ambiental estratégica (VIA e VAS em Itália).",
+  "scale.group": "Escala do mapa",
+  "scale.eu": "União Europeia",
+  "scale.country": "País",
+  "scale.municipality": "Município",
+  "map.aria": "Mapa de demonstração com obras e instalações",
+  "fb.aria": "Mapa esquemático de demonstração com obras e instalações",
+  "fb.note": "Este é um mapa esquemático: o mapa detalhado não foi carregado. Ao abrir a página num navegador com ligação à internet, aparece o mapa real, físico ou de ruas, até ao nível municipal.",
+  "fb.link": "Abrir esta zona no OpenStreetMap",
+  "legend.aria": "Legenda",
+  "legend.ok": "Autorizações em ordem",
+  "legend.proc": "Procedimento em curso",
+  "legend.irr": "Autorizações em falta",
+  "demo.note": "Demonstração com dados inventados: os pontos são marcadores e não correspondem a obras reais. Arraste para se deslocar e use + e − para ampliar. No canto superior direito pode passar do mapa físico para o mapa de ruas.",
+  "origin.h": "O problema",
+  "origin.p1": "Hoje, saber o que foi autorizado perto de casa pode exigir anos de pedidos a serviços diferentes.",
+  "origin.p2": "Entretanto, uma instalação pode funcionar com ruído e vibrações intensos para quem vive ao lado, e só no fim se descobre que as autorizações necessárias nunca foram emitidas.",
+  "origin.p3": "Os documentos estão dispersos por arquivos diferentes e o cidadão já tem de saber a quem os pedir. Esta proposta quer mudar isso.",
+  "prop.h": "Um mapa para toda a União, até ao município",
+  "prop.intro": "Uma plataforma pública europeia onde são registadas todas as obras, instalações e atividades sujeitas, ou potencialmente sujeitas, a avaliações, verificações ou autorizações ambientais. Funcionaria assim:",
+  "feat.1.h": "Mapa a todas as escalas",
+  "feat.1.p": "Consulta-se desde todo o território da União até um único município.",
+  "feat.2.h": "Um processo por cada obra",
+  "feat.2.p": "Ao selecionar uma obra no mapa, qualquer pessoa pode consultar e descarregar o seu processo digital com toda a documentação administrativa e de autorizações.",
+  "feat.3.h": "Um código europeu único",
+  "feat.3.p": "Cada obra tem um código de identificação e uma ficha com a localização, o responsável, as administrações competentes, as autorizações exigidas e emitidas, e o estado.",
+  "feat.4.h": "Também o que falta",
+  "feat.4.p": "São registadas as obras com procedimentos em curso, as que não têm as autorizações necessárias ou têm irregularidades comprovadas, e os resultados das verificações que concluem que uma autorização não é necessária.",
+  "feat.5.h": "Atualização obrigatória",
+  "feat.5.p": "As administrações atualizam o processo a cada emissão, alteração, renovação, suspensão ou revogação, e o histórico dos procedimentos continua consultável.",
+  "feat.6.h": "Pesquisa sem conhecer o serviço",
+  "feat.6.p": "Pesquisa-se por território, morada, tipo de atividade ou responsável, sem ter de saber qual o serviço que guarda os documentos.",
+  "feat.7.h": "Comunicações dos cidadãos",
+  "feat.7.p": "Quem encontrar uma obra não registada, ou informações em falta ou desatualizadas, pode comunicá-lo. A administração competente verifica e responde.",
+  "feat.8.h": "Regras comuns, competências nacionais",
+  "feat.8.p": "Critérios europeus uniformes de classificação, indexação e publicação, no respeito pelas legislações nacionais e pelas competências de cada Estado.",
+  "file.h": "O que conteria o processo",
+  "file.intro": "Conforme o tipo de obra e a legislação aplicável:",
+  "doc.1": "Avaliações de impacte ambiental (AIA) e decisões de sujeição a avaliação",
+  "doc.2": "Avaliações ambientais estratégicas (AAE) e avaliações de incidências ambientais Natura 2000 (Diretiva Habitats), quando aplicável",
+  "doc.3": "Autorizações ambientais integradas e autorizações de emissões",
+  "doc.4": "Títulos para a captação e utilização de recursos hídricos",
+  "doc.5": "Autorizações de descargas e de gestão da água",
+  "doc.6": "Autorizações em matéria de resíduos",
+  "doc.7": "Autorizações paisagísticas e de proteção da natureza e das áreas protegidas",
+  "doc.8": "Condicionantes, controlos e dados de monitorização",
+  "doc.9": "Alterações, renovações, suspensões, revogações e eventuais procedimentos de regularização",
+  "ben.h": "O que muda para os cidadãos e as administrações",
+  "ben.cit.h": "Para os cidadãos",
+  "ben.cit.p": "Conhecer de imediato a situação ambiental e de autorizações das obras do seu território, incluindo eventuais lacunas ou irregularidades, sem pedidos repetidos de documentos a serviços diferentes.",
+  "ben.adm.h": "Para as administrações",
+  "ben.adm.p": "Um instrumento de simplificação, colaboração e controlo, que reduz a fragmentação dos arquivos e os tempos de pesquisa.",
+  "ex.h": "Partir do que já existe",
+  "ex.p1": "A União Europeia já dispõe de instrumentos de informação territorial e ambiental, entre os quais o INSPIRE e o Portal Europeu das Emissões Industriais.",
+  "ex.p2": "A proposta não os substitui: integra-os num sistema que permite identificar cada obra e consultar todo o seu processo administrativo e de autorizações.",
+  "req.h": "O pedido às instituições",
+  "req.p1": "A proposta dirige-se ao Ministério italiano do Ambiente e da Segurança Energética, à Câmara dos Deputados, ao Senado da República, à Presidência da República, à Comissão Europeia (DG Ambiente) e ao Parlamento Europeu (comissões ENVI e PETI, eurodeputados italianos e Gabinete de Ligação em Itália).",
+  "req.p2": "A Itália pode promover esta iniciativa normativa, mas a proposta pode também ser apreciada diretamente a nível europeu, independentemente de um eventual papel formal da Itália.",
+  "req.p3": "Pede-se que seja tomada em consideração a nível nacional e europeu, no interesse da transparência administrativa, da proteção do ambiente e do direito dos cidadãos à informação.",
+  "con.h": "Contribuir",
+  "con.p1": "Este é um protótipo aberto: o mapa e os dados que vê são de demonstração. São precisas pessoas que saibam programar, trabalhar com dados ambientais e territoriais ou conheçam os procedimentos administrativos.",
+  "con.p2": "O código é público. Pode ler a lista de tarefas, propor uma ideia ou comunicar um problema.",
+  "con.btn": "Ir para o código no GitHub",
+  "foot.p": "EIA-SEA Atlas – proposta de iniciativa normativa nacional e europeia. Protótipo com dados inventados.",
+  "js.meta.title": "EIA-SEA Atlas – mapa público europeu das autorizações ambientais",
+  "js.meta.desc": "Cada obra e instalação com o seu processo ambiental e de autorizações, consultável por todos: da União Europeia ao município. Protótipo aberto a quem quiser contribuir.",
+  "js.s.ok": "Autorizações em ordem",
+  "js.s.proc": "Procedimento em curso",
+  "js.s.irr": "Autorizações em falta",
+  "js.ts.rel": "Emitida",
+  "js.ts.pend": "Em curso",
+  "js.ts.miss": "Sem registo de emissão",
+  "js.c.code": "Código",
+  "js.c.pos": "Localização",
+  "js.c.resp": "Responsável",
+  "js.c.comp": "Competentes",
+  "js.c.respval": "Empresa de exemplo",
+  "js.c.compval": "Região, município e autoridade ambiental",
+  "js.c.titles": "Autorizações exigidas e estado",
+  "js.c.empty": "Escolha um ponto no mapa para abrir o processo da obra.",
+  "js.cap.ue": "Vista europeia: um ponto por obra ou grupo de obras.",
+  "js.cap.paese": "Vista nacional: as obras de todo um país.",
+  "js.cap.comune": "Vista municipal: cada obra do território.",
+  "js.l.fisica": "Mapa físico",
+  "js.l.stradale": "Mapa de ruas",
+  "js.tpl.ind": "Instalação industrial",
+  "js.tpl.rif": "Instalação de gestão de resíduos",
+  "js.tpl.idrico": "Obra de captação de água",
+  "js.tpl.energia": "Instalação energética",
+  "js.t.aia": "Autorização ambiental integrada",
+  "js.t.emissioni": "Emissões para a atmosfera",
+  "js.t.scarichi": "Autorização de descargas",
+  "js.t.assogg": "Decisão de sujeição a AIA",
+  "js.t.via": "Avaliação de impacte ambiental (AIA)",
+  "js.t.rifiuti": "Autorização em matéria de resíduos",
+  "js.t.paesaggistica": "Autorização paisagística",
+  "js.t.prelievo": "Licença de captação de água",
+  "js.t.vinca": "Avaliação de incidências ambientais (Diretiva Habitats)",
+  "js.t.monitoraggio": "Plano de monitorização",
+  "js.place.fr": "Zona industrial, França",
+  "js.place.de": "Zona produtiva, Alemanha",
+  "js.place.pl": "Local energético, Polónia",
+  "js.place.es": "Bacia hidrográfica, Espanha",
+  "js.place.it": "Zona industrial, Itália",
+  "js.place.fi": "Local energético, Finlândia",
+  "js.place.nord": "Norte de Itália, zona de exemplo",
+  "js.place.centro": "Centro de Itália, zona de exemplo",
+  "js.place.sud": "Sul de Itália, zona de exemplo",
+  "js.place.sicilia": "Sicília, zona de exemplo",
+  "js.place.via1": "Rua de exemplo 1",
+  "js.place.loc2": "Localidade de exemplo 2",
+  "js.place.via3": "Rua de exemplo 3, perto de habitações",
+  "js.place.contrada4": "Bairro de exemplo 4",
+  "js.place.zona5": "Zona produtiva de exemplo 5",
+  "nav.aria": "Secções",
+  "demo.aria": "Demonstração do mapa"
+ }
+};
+  var JS_IT = {
+ "js.meta.title": "EIA-SEA Atlas – mappa pubblica europea delle autorizzazioni ambientali",
+ "js.meta.desc": "Ogni opera e impianto con il suo fascicolo ambientale e autorizzativo, consultabile da tutti: dall'Unione europea al comune. Prototipo aperto a chi vuole contribuire.",
+ "js.s.ok": "Titoli in regola",
+ "js.s.proc": "Procedimento in corso",
+ "js.s.irr": "Titoli mancanti",
+ "js.ts.rel": "Rilasciato",
+ "js.ts.pend": "In corso",
+ "js.ts.miss": "Non risulta rilasciato",
+ "js.c.code": "Codice",
+ "js.c.pos": "Posizione",
+ "js.c.resp": "Responsabile",
+ "js.c.comp": "Competenti",
+ "js.c.respval": "Società di esempio",
+ "js.c.compval": "Regione, Comune e autorità ambientale",
+ "js.c.titles": "Titoli richiesti e stato",
+ "js.c.empty": "Scegli un punto sulla mappa per aprire il fascicolo dell’opera.",
+ "js.cap.ue": "Vista europea: un punto per opera o gruppo di opere.",
+ "js.cap.paese": "Vista nazionale: le opere di un intero Paese.",
+ "js.cap.comune": "Vista comunale: ogni opera del territorio.",
+ "js.l.fisica": "Mappa fisica",
+ "js.l.stradale": "Mappa stradale",
+ "js.tpl.ind": "Impianto industriale",
+ "js.tpl.rif": "Impianto di gestione rifiuti",
+ "js.tpl.idrico": "Opera di prelievo idrico",
+ "js.tpl.energia": "Impianto per l’energia",
+ "js.t.aia": "Autorizzazione integrata ambientale (AIA)",
+ "js.t.emissioni": "Emissioni in atmosfera",
+ "js.t.scarichi": "Autorizzazione agli scarichi",
+ "js.t.assogg": "Verifica di assoggettabilità a VIA",
+ "js.t.via": "Valutazione di impatto ambientale (VIA)",
+ "js.t.rifiuti": "Autorizzazione in materia di rifiuti",
+ "js.t.paesaggistica": "Autorizzazione paesaggistica",
+ "js.t.prelievo": "Concessione di prelievo idrico",
+ "js.t.vinca": "Valutazione di incidenza (VIncA)",
+ "js.t.monitoraggio": "Piano di monitoraggio",
+ "js.place.fr": "Area industriale, Francia",
+ "js.place.de": "Zona produttiva, Germania",
+ "js.place.pl": "Area energetica, Polonia",
+ "js.place.es": "Bacino fluviale, Spagna",
+ "js.place.it": "Area industriale, Italia",
+ "js.place.fi": "Area energetica, Finlandia",
+ "js.place.nord": "Nord Italia, area di esempio",
+ "js.place.centro": "Centro Italia, area di esempio",
+ "js.place.sud": "Sud Italia, area di esempio",
+ "js.place.sicilia": "Sicilia, area di esempio",
+ "js.place.via1": "Via di esempio 1",
+ "js.place.loc2": "Località di esempio 2",
+ "js.place.via3": "Via di esempio 3, vicino alle abitazioni",
+ "js.place.contrada4": "Contrada di esempio 4",
+ "js.place.zona5": "Zona produttiva di esempio 5"
+};
+  var SUPPORTED = ["it", "en", "es", "fr", "pt"];
+  var lang = "it";
+
+  function t(key){
+    var d = DICT[lang];
+    return (lang !== "it" && d && d[key]) || JS_IT[key] || key;
+  }
+
   var SHAPES = {
-    ok:   {d:null, label:"Titoli in regola"},
-    proc: {d:"M0,-11 L11,0 L0,11 L-11,0Z", label:"Procedimento in corso"},
-    irr:  {d:"M0,-11 L11,9 L-11,9Z", label:"Titoli mancanti"}
+    ok:   {d:null, k:"js.s.ok"},
+    proc: {d:"M0,-11 L11,0 L0,11 L-11,0Z", k:"js.s.proc"},
+    irr:  {d:"M0,-11 L11,9 L-11,9Z", k:"js.s.irr"}
   };
   var TPL = [
-    {name:"Impianto industriale", titles:["Autorizzazione integrata ambientale (AIA)","Emissioni in atmosfera","Autorizzazione agli scarichi","Verifica di assoggettabilità a VIA"]},
-    {name:"Impianto di gestione rifiuti", titles:["Valutazione di impatto ambientale (VIA)","Autorizzazione integrata ambientale (AIA)","Autorizzazione in materia di rifiuti","Autorizzazione paesaggistica"]},
-    {name:"Opera di prelievo idrico", titles:["Concessione di prelievo idrico","Autorizzazione agli scarichi","Valutazione di incidenza (VIncA)"]},
-    {name:"Impianto per l’energia", titles:["Valutazione di impatto ambientale (VIA)","Autorizzazione paesaggistica","Valutazione di incidenza (VIncA)","Piano di monitoraggio"]}
+    {name:"js.tpl.ind", titles:["js.t.aia","js.t.emissioni","js.t.scarichi","js.t.assogg"]},
+    {name:"js.tpl.rif", titles:["js.t.via","js.t.aia","js.t.rifiuti","js.t.paesaggistica"]},
+    {name:"js.tpl.idrico", titles:["js.t.prelievo","js.t.scarichi","js.t.vinca"]},
+    {name:"js.tpl.energia", titles:["js.t.via","js.t.paesaggistica","js.t.vinca","js.t.monitoraggio"]}
   ];
 
-  // pts: [latitudine, longitudine, stato, modello, codice, posizione]
+  // pts: [latitudine, longitudine, stato, modello, codice, chiave del luogo]
   // box: limiti della vista per la mappa schematica
   var VIEWS = {
     ue: {
-      center:[50.0,10.0], zoom:4,
-      box:{n:66,s:34,w:-12,e:34},
-      caption:"Vista europea: un punto per opera o gruppo di opere.",
+      center:[50.0,10.0], zoom:4, box:{n:66,s:34,w:-12,e:34}, cap:"js.cap.ue",
       pts:[
-        [45.76,4.84,"ok",0,"EU-FR-000812","Area industriale, Francia"],
-        [51.30,9.50,"irr",1,"EU-DE-001204","Zona produttiva, Germania"],
-        [52.20,19.40,"proc",3,"EU-PL-000377","Area energetica, Polonia"],
-        [40.40,-3.70,"ok",2,"EU-ES-002210","Bacino fluviale, Spagna"],
-        [45.00,9.70,"irr",0,"EU-IT-000417","Area industriale, Italia"],
-        [61.50,25.70,"ok",3,"EU-FI-000095","Area energetica, Finlandia"]
+        [45.76,4.84,"ok",0,"EU-FR-000812","js.place.fr"],
+        [51.30,9.50,"irr",1,"EU-DE-001204","js.place.de"],
+        [52.20,19.40,"proc",3,"EU-PL-000377","js.place.pl"],
+        [40.40,-3.70,"ok",2,"EU-ES-002210","js.place.es"],
+        [45.00,9.70,"irr",0,"EU-IT-000417","js.place.it"],
+        [61.50,25.70,"ok",3,"EU-FI-000095","js.place.fi"]
       ]
     },
     paese: {
-      center:[42.8,12.6], zoom:6,
-      box:{n:47.5,s:36,w:6,e:19},
-      caption:"Vista nazionale: le opere di un intero Paese.",
+      center:[42.8,12.6], zoom:6, box:{n:47.5,s:36,w:6,e:19}, cap:"js.cap.paese",
       pts:[
-        [45.50,9.20,"ok",1,"EU-IT-003301","Nord Italia, area di esempio"],
-        [44.50,11.30,"proc",0,"EU-IT-003412","Nord Italia, area di esempio"],
-        [43.80,11.20,"ok",3,"EU-IT-003518","Centro Italia, area di esempio"],
-        [41.90,12.50,"irr",0,"EU-IT-000417","Centro Italia, area di esempio"],
-        [40.85,14.25,"ok",2,"EU-IT-003790","Sud Italia, area di esempio"],
-        [38.10,13.40,"proc",1,"EU-IT-003844","Sicilia, area di esempio"]
+        [45.50,9.20,"ok",1,"EU-IT-003301","js.place.nord"],
+        [44.50,11.30,"proc",0,"EU-IT-003412","js.place.nord"],
+        [43.80,11.20,"ok",3,"EU-IT-003518","js.place.centro"],
+        [41.90,12.50,"irr",0,"EU-IT-000417","js.place.centro"],
+        [40.85,14.25,"ok",2,"EU-IT-003790","js.place.sud"],
+        [38.10,13.40,"proc",1,"EU-IT-003844","js.place.sicilia"]
       ]
     },
     comune: {
-      center:[44.8015,10.3279], zoom:13,
-      box:{n:44.85,s:44.755,w:10.26,e:10.40},
-      caption:"Vista comunale: ogni opera del territorio.",
+      center:[44.8015,10.3279], zoom:13, box:{n:44.85,s:44.755,w:10.26,e:10.40}, cap:"js.cap.comune",
       pts:[
-        [44.805,10.310,"ok",0,"EU-IT-007120","Via di esempio 1"],
-        [44.790,10.345,"proc",2,"EU-IT-007133","Località di esempio 2"],
-        [44.815,10.360,"irr",0,"EU-IT-000417","Via di esempio 3, vicino alle abitazioni"],
-        [44.775,10.300,"ok",3,"EU-IT-007201","Contrada di esempio 4"],
-        [44.830,10.330,"ok",1,"EU-IT-007254","Zona produttiva di esempio 5"]
+        [44.805,10.310,"ok",0,"EU-IT-007120","js.place.via1"],
+        [44.790,10.345,"proc",2,"EU-IT-007133","js.place.loc2"],
+        [44.815,10.360,"irr",0,"EU-IT-000417","js.place.via3"],
+        [44.775,10.300,"ok",3,"EU-IT-007201","js.place.contrada4"],
+        [44.830,10.330,"ok",1,"EU-IT-007254","js.place.zona5"]
       ]
     }
   };
 
   var PROVIDERS = [
-    {nome:"Mappa fisica", url:"https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", sub:"abc", nativeMax:17,
-     attr:'Dati &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Stile &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'},
-    {nome:"Mappa stradale", url:"https://tile.openstreetmap.org/{z}/{x}/{y}.png", sub:"abc", nativeMax:19,
-     attr:'&copy; <a href="https://www.openstreetmap.org/copyright">Contributori di OpenStreetMap</a>'},
-    {nome:"Mappa di riserva", url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", sub:"abcd", nativeMax:19,
-     attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}
+    {url:"https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", sub:"abc", nativeMax:17,
+     attr:'Data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Style &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'},
+    {url:"https://tile.openstreetmap.org/{z}/{x}/{y}.png", sub:"abc", nativeMax:19,
+     attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
+    {url:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", sub:"abcd", nativeMax:19,
+     attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}
   ];
 
   var fileEl = document.getElementById("file");
@@ -433,22 +1006,79 @@ footer p{margin:0}
   var fbPoints = document.getElementById("fbpoints");
   var noteEl = document.getElementById("mapnote");
   var osmLink = document.getElementById("osmlink");
+  var langSel = document.getElementById("lang");
   var buttons = document.querySelectorAll(".scale button");
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var mode = "leaflet";
   var current = "ue";
-  var selectedEl = null;
-  var map = null, layer = null, layers = [], active = 0, errs = [], loaded = false, timer = null;
+  var selectedEl = null, selectedP = null;
+  var map = null, layer = null, layers = [], active = 0, errs = [], loaded = false, timer = null, ctrl = null;
+
+  /* ---------- Lingua ---------- */
+  var defaults = new WeakMap();
+  function applyStatic(){
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var d = defaults.get(el);
+      if (!d){ d = {html: el.innerHTML, attrs: {}}; defaults.set(el, d); }
+      var v = lang === "it" ? d.html : ((DICT[lang] && DICT[lang][el.getAttribute("data-i18n")]) || d.html);
+      el.innerHTML = v;
+    });
+    document.querySelectorAll("[data-i18n-attr]").forEach(function(el){
+      var d = defaults.get(el);
+      if (!d){ d = {html: null, attrs: {}}; defaults.set(el, d); }
+      el.getAttribute("data-i18n-attr").split(";").forEach(function(pair){
+        var a = pair.split(":"), attr = a[0], key = a[1];
+        if (d.attrs[attr] === undefined) d.attrs[attr] = el.getAttribute(attr);
+        var v = lang === "it" ? d.attrs[attr] : ((DICT[lang] && DICT[lang][key]) || d.attrs[attr]);
+        el.setAttribute(attr, v);
+      });
+    });
+  }
+  function pickLang(){
+    var q = null;
+    try { q = new URLSearchParams(window.location.search).get("lang"); } catch(e){}
+    if (q && SUPPORTED.indexOf(q) >= 0) return q;
+    try {
+      var s = window.localStorage.getItem("lang");
+      if (s && SUPPORTED.indexOf(s) >= 0) return s;
+    } catch(e){}
+    var n = ((navigator.language || "it") + "").slice(0, 2).toLowerCase();
+    if (SUPPORTED.indexOf(n) >= 0) return n;
+    return "en";
+  }
+  function emptyHtml(){ return '<p class="empty">' + t("js.c.empty") + '</p>'; }
+  function setLang(l, save){
+    if (SUPPORTED.indexOf(l) < 0) l = "it";
+    lang = l;
+    document.documentElement.setAttribute("lang", l);
+    applyStatic();
+    document.title = t("js.meta.title");
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute("content", t("js.meta.desc"));
+    langSel.value = l;
+    if (save){
+      try { window.localStorage.setItem("lang", l); } catch(e){}
+      try {
+        var u = new URL(window.location.href);
+        u.searchParams.set("lang", l);
+        window.history.replaceState(null, "", u.toString());
+      } catch(e){}
+    }
+    captionEl.textContent = t(VIEWS[current].cap);
+    if (map) buildControl();
+    renderPoints(current);
+    if (selectedP) showFile(selectedP); else fileEl.innerHTML = emptyHtml();
+  }
 
   /* ---------- Scheda dell'opera ---------- */
   function titleStates(tpl, state){
-    var n = TPL[tpl].titles.length;
-    return TPL[tpl].titles.map(function(t, i){
-      var s = "Rilasciato", cls = "";
-      if (state === "proc" && i >= n - 2){ s = "In corso"; cls = "pend"; }
-      if (state === "irr" && i < 2){ s = "Non risulta rilasciato"; cls = "miss"; }
-      return {t:t, s:s, cls:cls};
+    var keys = TPL[tpl].titles, n = keys.length;
+    return keys.map(function(k, i){
+      var s = "js.ts.rel", cls = "";
+      if (state === "proc" && i >= n - 2){ s = "js.ts.pend"; cls = "pend"; }
+      if (state === "irr" && i < 2){ s = "js.ts.miss"; cls = "miss"; }
+      return {t:k, s:s, cls:cls};
     });
   }
   function iconSvg(state){
@@ -458,29 +1088,48 @@ footer p{margin:0}
   function showFile(p){
     var tpl = p[3], state = p[2];
     var rows = titleStates(tpl, state).map(function(r){
-      return '<li class="'+r.cls+'"><span>'+r.t+'</span><span>'+r.s+'</span></li>';
+      return '<li class="'+r.cls+'"><span>'+t(r.t)+'</span><span>'+t(r.s)+'</span></li>';
     }).join("");
     fileEl.innerHTML =
-      '<h3>'+TPL[tpl].name+'</h3>' +
-      '<p class="code">Codice '+p[4]+'</p>' +
-      '<div class="badge '+state+'">'+iconSvg(state)+SHAPES[state].label+'</div>' +
+      '<h3>'+t(TPL[tpl].name)+'</h3>' +
+      '<p class="code">'+t("js.c.code")+' '+p[4]+'</p>' +
+      '<div class="badge '+state+'">'+iconSvg(state)+t(SHAPES[state].k)+'</div>' +
       '<dl>' +
-        '<dt>Posizione</dt><dd>'+p[5]+'</dd>' +
-        '<dt>Responsabile</dt><dd>Società di esempio</dd>' +
-        '<dt>Competenti</dt><dd>Regione, Comune e autorità ambientale</dd>' +
+        '<dt>'+t("js.c.pos")+'</dt><dd>'+t(p[5])+'</dd>' +
+        '<dt>'+t("js.c.resp")+'</dt><dd>'+t("js.c.respval")+'</dd>' +
+        '<dt>'+t("js.c.comp")+'</dt><dd>'+t("js.c.compval")+'</dd>' +
       '</dl>' +
-      '<h4>Titoli richiesti e stato</h4>' +
+      '<h4>'+t("js.c.titles")+'</h4>' +
       '<ul class="titles">'+rows+'</ul>';
   }
   function choose(el, p){
     if (selectedEl) selectedEl.classList.remove("sel");
     selectedEl = el;
+    selectedP = p;
     el.classList.add("sel");
     showFile(p);
   }
-  function label(p){ return TPL[p[3]].name+", "+p[5]+": "+SHAPES[p[2]].label; }
+  function label(p){ return t(TPL[p[3]].name)+", "+t(p[5])+": "+t(SHAPES[p[2]].k); }
   function shapeSvg(state){
     return state === "ok" ? '<circle class="shape" r="9"/>' : '<path class="shape" d="'+SHAPES[state].d+'"/>';
+  }
+  function reselect(){
+    selectedEl = null;
+    if (!selectedP) return;
+    if (mode === "leaflet" && layer){
+      layer.eachLayer(function(m){
+        if (m._p === selectedP && m.getElement()){ selectedEl = m.getElement(); selectedEl.classList.add("sel"); }
+      });
+    } else {
+      var gs = fbPoints.children;
+      for (var i = 0; i < gs.length; i++){
+        if (gs[i]._p === selectedP){ selectedEl = gs[i]; gs[i].classList.add("sel"); }
+      }
+    }
+  }
+  function renderPoints(key){
+    if (mode === "leaflet" && layer) renderLeaflet(key); else renderFallback(key);
+    reselect();
   }
 
   /* ---------- Mappa dettagliata (Leaflet) ---------- */
@@ -494,6 +1143,7 @@ footer p{margin:0}
         iconSize:[30,30], iconAnchor:[15,15]
       });
       var m = L.marker([p[0], p[1]], {icon:icon, keyboard:true, title:label(p), alt:label(p)});
+      m._p = p;
       m.on("click", function(){ choose(m.getElement(), p); });
       m.addTo(layer);
     });
@@ -519,16 +1169,20 @@ footer p{margin:0}
       useFallback();
     }
   }
+  function buildControl(){
+    if (ctrl) map.removeControl(ctrl);
+    var base = {};
+    base[t("js.l.fisica")] = layers[0];
+    base[t("js.l.stradale")] = layers[1];
+    ctrl = L.control.layers(base, null, {collapsed:false}).addTo(map);
+  }
   function initLeaflet(){
     map = L.map("map", {scrollWheelZoom:false, worldCopyJump:true})
       .setView(VIEWS.ue.center, VIEWS.ue.zoom);
     layer = L.layerGroup().addTo(map);
     for (var i = 0; i < PROVIDERS.length; i++) layers.push(makeLayer(i));
     layers[0].addTo(map);
-    var base = {};
-    base[PROVIDERS[0].nome] = layers[0];
-    base[PROVIDERS[1].nome] = layers[1];
-    L.control.layers(base, null, {collapsed:false}).addTo(map);
+    buildControl();
     map.on("baselayerchange", function(e){
       var i = layers.indexOf(e.layer);
       if (i >= 0){ active = i; errs[i] = 0; }
@@ -553,6 +1207,7 @@ footer p{margin:0}
       g.setAttribute("role", "button");
       g.setAttribute("aria-label", label(p));
       g.innerHTML = '<circle r="20" fill="transparent"/><circle class="ring" r="17"/>'+shapeSvg(p[2]);
+      g._p = p;
       g.addEventListener("click", function(){ choose(g, p); });
       g.addEventListener("keydown", function(e){
         if (e.key === "Enter" || e.key === " "){ e.preventDefault(); choose(g, p); }
@@ -568,28 +1223,27 @@ footer p{margin:0}
     if (mode === "fallback") return;
     mode = "fallback";
     clearTimeout(timer);
-    mapEl.hidden = true;
-    fbEl.hidden = false;
-    noteEl.hidden = false;
-    selectedEl = null;
+    mapEl.setAttribute("hidden", "");
+    fbEl.removeAttribute("hidden");
+    noteEl.removeAttribute("hidden");
     updateOsmLink();
     renderFallback(current);
+    reselect();
   }
 
   /* ---------- Cambio di scala ---------- */
   function setView(key){
     current = key;
     var v = VIEWS[key];
-    captionEl.textContent = v.caption;
     selectedEl = null;
-    fileEl.innerHTML = '<p class="empty">Scegli un punto sulla mappa per aprire il fascicolo dell’opera.</p>';
+    selectedP = null;
+    captionEl.textContent = t(v.cap);
+    fileEl.innerHTML = emptyHtml();
     updateOsmLink();
+    renderPoints(key);
     if (mode === "leaflet"){
-      renderLeaflet(key);
       if (reduce) map.setView(v.center, v.zoom);
       else map.flyTo(v.center, v.zoom, {duration:1.4});
-    } else {
-      renderFallback(key);
     }
   }
 
@@ -599,17 +1253,17 @@ footer p{margin:0}
       setView(b.getAttribute("data-view"));
     });
   });
+  langSel.addEventListener("change", function(){ setLang(langSel.value, true); });
 
   /* ---------- Avvio ---------- */
-  captionEl.textContent = VIEWS.ue.caption;
   if (typeof L === "undefined"){
-    mode = "leaflet";
     useFallback();
   } else {
     initLeaflet();
-    renderLeaflet("ue");
   }
+  setLang(pickLang(), false);
 })();
+
 </script>
 </body>
 </html>

@@ -23,6 +23,7 @@ Versione online (GitHub Pages): https://nalomb2009.github.io/eia-sea-atlas/
 - Pagina unica in HTML, CSS e JavaScript, senza framework e senza server.
 - Mappa con [Leaflet](https://leafletjs.com): carta fisica con rilievo ([OpenTopoMap](https://opentopomap.org)) e carta stradale ([OpenStreetMap](https://www.openstreetmap.org)), con selettore.
 - Tre scale di partenza: Unione europea, Paese, Comune.
+- Cinque lingue (italiano, inglese, spagnolo, francese, portoghese), scelte dal selettore in alto a destra o con un link diretto, per esempio `?lang=en`. Le traduzioni vanno riviste da madrelingua.
 - Tre stati delle opere (titoli in regola, procedimento in corso, titoli mancanti), distinti da colore **e** forma.
 - Scheda dell'opera con codice identificativo, posizione, responsabile, amministrazioni competenti e stato di ogni titolo.
 - Mappa schematica di riserva, se le carte non si caricano.
@@ -36,6 +37,7 @@ Tutto è in `index.html`:
 |---|---|
 | `TPL` | I modelli di opera e l'elenco dei titoli richiesti per ciascuno |
 | `VIEWS` | Le tre scale, con centro, zoom e punti dimostrativi (`pts`) |
+| `DICT` | Le traduzioni dei testi della pagina e delle schede, un blocco per lingua |
 | `PROVIDERS` | I fornitori delle carte, provati in ordine |
 | `renderLeaflet` / `renderFallback` | Disegno dei punti sulla mappa dettagliata o su quella schematica |
 
@@ -52,6 +54,7 @@ Apri una *Issue* per proporre un'idea o segnalare un problema, oppure una *Pull 
 - [ ] Modulo per segnalare opere non censite o informazioni mancanti o non aggiornate
 - [ ] Verifica di accessibilità (WCAG) e traduzione nelle lingue dell'Unione
 - [ ] Raggruppamento dei punti alle scale più ampie e caricamento della sola zona visibile
+- [ ] Revisione delle traduzioni da parte di madrelingua e nuove lingue (si copia un blocco di `DICT`, si traduce, si aggiunge il codice lingua a `SUPPORTED` e una voce al selettore)
 - [ ] Passare a un fornitore di carte adatto a un uso con molto traffico (i server pubblici di OpenStreetMap hanno limiti d'uso)
 
 ## Componenti e licenze di terze parti
