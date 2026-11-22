@@ -14,7 +14,9 @@ L'idea: ogni opera ha un proprio **fascicolo digitale** (valutazioni, autorizzaz
 2. Aprilo con un browser (Chrome, Firefox, Safari o Edge) con la connessione internet attiva: le carte arrivano da server esterni (OpenTopoMap e OpenStreetMap).
 3. Scegli la scala (Unione europea, Paese, Comune) e clicca un punto per aprire la scheda dell'opera.
 
-Per avere un indirizzo web pubblico e gratuito: **Settings → Pages → Deploy from a branch → `main` / `(root)`**. Dopo un minuto il sito è visibile su `https://NOME-UTENTE.github.io/NOME-REPOSITORY/`.
+Versione online (GitHub Pages): https://nalomb2009.github.io/eia-sea-atlas/
+
+**Perché questo nome:** EIA e SEA sono i nomi inglesi della valutazione di impatto ambientale (VIA) e della valutazione ambientale strategica (VAS).
 
 ## Cosa fa
 
@@ -62,4 +64,4 @@ Apri una *Issue* per proporre un'idea o segnalare un problema, oppure una *Pull 
 
 ## Licenza
 
-Da definire.
+Licensed under the EUPL. Il codice è distribuito con la [European Union Public Licence v. 1.2](LICENSE.txt) (EUPL-1.2).
