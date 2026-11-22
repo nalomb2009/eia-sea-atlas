@@ -147,6 +147,9 @@ section.block h2{font-size:clamp(1.6rem,3.4vw,2.2rem);margin-bottom:1.25rem;max-
 @media (max-width:760px){.feat{grid-template-columns:1fr}}
 .feat h3{font-size:1.15rem;margin-bottom:.35rem}
 .feat p{margin:0;color:var(--muted)}
+.bul{margin:0 0 1rem;padding-left:1.25rem}
+.bul li{margin:.3rem 0}
+.bul li::marker{color:var(--teal)}
 .docs{columns:2;column-gap:2.5rem;margin:1.5rem 0 0;padding:0;list-style:none;max-width:860px}
 @media (max-width:700px){.docs{columns:1}}
 .docs li{break-inside:avoid;padding:.55rem 0;border-top:1px solid var(--line)}
@@ -255,7 +258,18 @@ footer p{margin:0}
         <h2 data-i18n="origin.h">Il problema</h2>
         <div class="prose">
           <p data-i18n="origin.p1">Oggi sapere che cosa è stato autorizzato vicino a casa può richiedere anni di richieste a uffici diversi.</p>
-          <p data-i18n="origin.p2">Nel frattempo un impianto può funzionare con rumori e vibrazioni pesanti per chi vive accanto, e solo alla fine emerge che i titoli necessari non risultano rilasciati.</p>
+          <p data-i18n="origin.p2">Nel frattempo un impianto può continuare a funzionare, anche senza i titoli necessari, con possibili danni all’ambiente e a chi vive vicino, per esempio:</p>
+          <ul class="bul">
+            <li data-i18n="origin.l1">rumori e vibrazioni</li>
+            <li data-i18n="origin.l2">inquinamento dell’aria: emissioni, polveri e odori</li>
+            <li data-i18n="origin.l3">inquinamento di acque e suolo: scarichi, sversamenti e rifiuti</li>
+            <li data-i18n="origin.l4">prelievi eccessivi o abusivi di acqua</li>
+            <li data-i18n="origin.l5">danni a habitat, specie protette e aree naturali</li>
+            <li data-i18n="origin.l6">alterazione del paesaggio</li>
+            <li data-i18n="origin.l7">emissioni che contribuiscono ai cambiamenti climatici</li>
+            <li data-i18n="origin.l8">rischi per la salute e la sicurezza delle persone</li>
+          </ul>
+          <p data-i18n="origin.p2b">Solo alla fine può emergere che i titoli necessari non erano mai stati rilasciati.</p>
           <p data-i18n="origin.p3">I documenti sono sparsi in archivi diversi e il cittadino deve già sapere a chi chiederli. Questa proposta vuole cambiare questo.</p>
         </div>
       </div>
@@ -399,7 +413,16 @@ footer p{margin:0}
   "demo.note": "Demonstration with invented data: the points are placeholders and do not correspond to real works. Drag to move around and use + and − to zoom. At the top right you can switch from the physical map to the street map.",
   "origin.h": "The problem",
   "origin.p1": "Today, finding out what has been authorised near your home can take years of requests to different offices.",
-  "origin.p2": "Meanwhile a plant may operate with heavy noise and vibration for those living next to it, and only in the end does it emerge that the necessary permits were never issued.",
+  "origin.p2": "Meanwhile a plant can keep operating, even without the necessary permits, with possible harm to the environment and to those living nearby, for example:",
+  "origin.l1": "noise and vibration",
+  "origin.l2": "air pollution: emissions, dust and odours",
+  "origin.l3": "water and soil pollution: discharges, spills and waste",
+  "origin.l4": "excessive or unauthorised water abstraction",
+  "origin.l5": "damage to habitats, protected species and natural areas",
+  "origin.l6": "alteration of the landscape",
+  "origin.l7": "emissions that contribute to climate change",
+  "origin.l8": "risks to people’s health and safety",
+  "origin.p2b": "Only in the end may it emerge that the necessary permits were never issued.",
   "origin.p3": "Documents are scattered across different archives and citizens must already know whom to ask. This proposal aims to change that.",
   "prop.h": "One map for the whole Union, down to the municipality",
   "prop.intro": "A public European platform that lists all works, plants and activities subject, or potentially subject, to environmental assessments, checks or authorisations. It would work like this:",
@@ -526,7 +549,16 @@ footer p{margin:0}
   "demo.note": "Demostración con datos inventados: los puntos son marcadores de posición y no corresponden a obras reales. Arrastra para moverte y usa + y − para ampliar. Arriba a la derecha puedes pasar del mapa físico al mapa de calles.",
   "origin.h": "El problema",
   "origin.p1": "Hoy, saber qué se ha autorizado cerca de casa puede exigir años de solicitudes a oficinas distintas.",
-  "origin.p2": "Mientras tanto, una instalación puede funcionar con ruidos y vibraciones intensos para quienes viven al lado, y solo al final se descubre que no constan las autorizaciones necesarias.",
+  "origin.p2": "Mientras tanto, una instalación puede seguir funcionando, incluso sin las autorizaciones necesarias, con posibles daños al medio ambiente y a quienes viven cerca, por ejemplo:",
+  "origin.l1": "ruidos y vibraciones",
+  "origin.l2": "contaminación del aire: emisiones, polvo y olores",
+  "origin.l3": "contaminación del agua y del suelo: vertidos, derrames y residuos",
+  "origin.l4": "captaciones de agua excesivas o ilegales",
+  "origin.l5": "daños a hábitats, especies protegidas y espacios naturales",
+  "origin.l6": "alteración del paisaje",
+  "origin.l7": "emisiones que contribuyen al cambio climático",
+  "origin.l8": "riesgos para la salud y la seguridad de las personas",
+  "origin.p2b": "Solo al final puede descubrirse que las autorizaciones necesarias nunca se habían concedido.",
   "origin.p3": "Los documentos están dispersos en archivos diferentes y la ciudadanía ya tiene que saber a quién pedirlos. Esta propuesta quiere cambiarlo.",
   "prop.h": "Un mapa para toda la Unión, hasta el municipio",
   "prop.intro": "Una plataforma pública europea en la que se registran todas las obras, instalaciones y actividades sujetas, o potencialmente sujetas, a evaluaciones, verificaciones o autorizaciones ambientales. Funcionaría así:",
@@ -653,7 +685,16 @@ footer p{margin:0}
   "demo.note": "Démonstration avec des données inventées : les points sont des repères fictifs et ne correspondent pas à des ouvrages réels. Faites glisser pour vous déplacer et utilisez + et − pour zoomer. En haut à droite, vous pouvez passer de la carte physique à la carte routière.",
   "origin.h": "Le problème",
   "origin.p1": "Aujourd’hui, savoir ce qui a été autorisé près de chez soi peut demander des années de démarches auprès de services différents.",
-  "origin.p2": "Pendant ce temps, une installation peut fonctionner avec un bruit et des vibrations importants pour ses voisins, et ce n’est qu’à la fin qu’on découvre que les autorisations nécessaires n’ont pas été délivrées.",
+  "origin.p2": "Pendant ce temps, une installation peut continuer à fonctionner, même sans les autorisations nécessaires, avec d’éventuels dommages pour l’environnement et pour les riverains, par exemple :",
+  "origin.l1": "bruit et vibrations",
+  "origin.l2": "pollution de l’air : émissions, poussières et odeurs",
+  "origin.l3": "pollution de l’eau et des sols : rejets, déversements et déchets",
+  "origin.l4": "prélèvements d’eau excessifs ou illégaux",
+  "origin.l5": "atteintes aux habitats, aux espèces protégées et aux espaces naturels",
+  "origin.l6": "altération du paysage",
+  "origin.l7": "émissions qui contribuent au changement climatique",
+  "origin.l8": "risques pour la santé et la sécurité des personnes",
+  "origin.p2b": "Ce n’est qu’à la fin qu’on peut découvrir que les autorisations nécessaires n’avaient jamais été délivrées.",
   "origin.p3": "Les documents sont dispersés dans des archives différentes et le citoyen doit déjà savoir à qui les demander. Cette proposition veut changer cela.",
   "prop.h": "Une carte pour toute l’Union, jusqu’à la commune",
   "prop.intro": "Une plateforme publique européenne qui recense tous les ouvrages, installations et activités soumis, ou susceptibles d’être soumis, à des évaluations, vérifications ou autorisations environnementales. Elle fonctionnerait ainsi :",
@@ -780,7 +821,16 @@ footer p{margin:0}
   "demo.note": "Demonstração com dados inventados: os pontos são marcadores e não correspondem a obras reais. Arraste para se deslocar e use + e − para ampliar. No canto superior direito pode passar do mapa físico para o mapa de ruas.",
   "origin.h": "O problema",
   "origin.p1": "Hoje, saber o que foi autorizado perto de casa pode exigir anos de pedidos a serviços diferentes.",
-  "origin.p2": "Entretanto, uma instalação pode funcionar com ruído e vibrações intensos para quem vive ao lado, e só no fim se descobre que as autorizações necessárias nunca foram emitidas.",
+  "origin.p2": "Entretanto, uma instalação pode continuar a funcionar, mesmo sem as autorizações necessárias, com possíveis danos para o ambiente e para quem vive perto, por exemplo:",
+  "origin.l1": "ruído e vibrações",
+  "origin.l2": "poluição do ar: emissões, poeiras e odores",
+  "origin.l3": "poluição da água e do solo: descargas, derrames e resíduos",
+  "origin.l4": "captações de água excessivas ou ilegais",
+  "origin.l5": "danos em habitats, espécies protegidas e áreas naturais",
+  "origin.l6": "alteração da paisagem",
+  "origin.l7": "emissões que contribuem para as alterações climáticas",
+  "origin.l8": "riscos para a saúde e a segurança das pessoas",
+  "origin.p2b": "Só no fim pode descobrir-se que as autorizações necessárias nunca tinham sido emitidas.",
   "origin.p3": "Os documentos estão dispersos por arquivos diferentes e o cidadão já tem de saber a quem os pedir. Esta proposta quer mudar isso.",
   "prop.h": "Um mapa para toda a União, até ao município",
   "prop.intro": "Uma plataforma pública europeia onde são registadas todas as obras, instalações e atividades sujeitas, ou potencialmente sujeitas, a avaliações, verificações ou autorizações ambientais. Funcionaria assim:",
