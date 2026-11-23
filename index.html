@@ -247,6 +247,7 @@ footer p{margin:0}
           <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,9 L-11,9Z" fill="var(--red)"/></svg><span data-i18n="legend.irr">Titoli mancanti</span></li>
         </ul>
         <p class="demo-note" data-i18n="demo.note">Dimostrazione con dati inventati: i punti sono segnaposto e non corrispondono a opere reali. Trascina per spostarti e usa + e − per ingrandire. In alto a destra puoi passare dalla mappa fisica a quella stradale.</p>
+        <p class="demo-note" data-i18n="layers.note">Con il selettore in alto a destra puoi aggiungere due livelli con dati reali dell’Agenzia europea dell’ambiente (EEA): le aree Natura 2000 e gli impianti industriali del portale europeo sulle emissioni industriali. Questi impianti non mostrano lo stato delle autorizzazioni: i dati non dicono se abbiano o no i titoli necessari.</p>
       </div>
 
       <aside class="file-card" id="file" aria-live="polite">
@@ -522,7 +523,10 @@ footer p{margin:0}
   "js.place.contrada4": "Sample district 4",
   "js.place.zona5": "Sample industrial zone 5",
   "nav.aria": "Sections",
-  "demo.aria": "Map demonstration"
+  "demo.aria": "Map demonstration",
+  "js.o.natura": "Natura 2000 sites (EEA)",
+  "js.o.ied": "Industrial sites (EEA)",
+  "layers.note": "Using the selector at the top right you can add two layers with real data from the European Environment Agency (EEA): Natura 2000 sites and the industrial sites of the European Industrial Emissions Portal. These sites do not show permit status: the data do not say whether they hold the necessary permits."
  },
  "es": {
   "nav.problem": "El problema",
@@ -658,7 +662,10 @@ footer p{margin:0}
   "js.place.contrada4": "Paraje de ejemplo 4",
   "js.place.zona5": "Zona productiva de ejemplo 5",
   "nav.aria": "Secciones",
-  "demo.aria": "Demostración del mapa"
+  "demo.aria": "Demostración del mapa",
+  "js.o.natura": "Espacios Natura 2000 (AEMA)",
+  "js.o.ied": "Instalaciones industriales (AEMA)",
+  "layers.note": "Con el selector de arriba a la derecha puedes añadir dos capas con datos reales de la Agencia Europea de Medio Ambiente (AEMA): los espacios Natura 2000 y las instalaciones industriales del Portal Europeo de Emisiones Industriales. Estas instalaciones no muestran el estado de sus autorizaciones: los datos no indican si disponen o no de las autorizaciones necesarias."
  },
  "fr": {
   "nav.problem": "Le problème",
@@ -794,7 +801,10 @@ footer p{margin:0}
   "js.place.contrada4": "Quartier d’exemple 4",
   "js.place.zona5": "Zone d’activités d’exemple 5",
   "nav.aria": "Sections",
-  "demo.aria": "Démonstration de la carte"
+  "demo.aria": "Démonstration de la carte",
+  "js.o.natura": "Sites Natura 2000 (AEE)",
+  "js.o.ied": "Sites industriels (AEE)",
+  "layers.note": "Avec le sélecteur en haut à droite, vous pouvez ajouter deux couches de données réelles de l’Agence européenne pour l’environnement (AEE) : les sites Natura 2000 et les sites industriels du Portail européen des émissions industrielles. Ces sites n’indiquent pas l’état des autorisations : les données ne disent pas s’ils disposent ou non des autorisations nécessaires."
  },
  "pt": {
   "nav.problem": "O problema",
@@ -930,7 +940,10 @@ footer p{margin:0}
   "js.place.contrada4": "Bairro de exemplo 4",
   "js.place.zona5": "Zona produtiva de exemplo 5",
   "nav.aria": "Secções",
-  "demo.aria": "Demonstração do mapa"
+  "demo.aria": "Demonstração do mapa",
+  "js.o.natura": "Áreas Natura 2000 (AEA)",
+  "js.o.ied": "Instalações industriais (AEA)",
+  "layers.note": "Com o seletor no canto superior direito pode adicionar duas camadas com dados reais da Agência Europeia do Ambiente (AEA): as áreas Natura 2000 e as instalações industriais do Portal Europeu das Emissões Industriais. Estas instalações não mostram o estado das autorizações: os dados não dizem se têm ou não as autorizações necessárias."
  }
 };
   var JS_IT = {
@@ -983,7 +996,9 @@ footer p{margin:0}
  "js.place.loc2": "Località di esempio 2",
  "js.place.via3": "Via di esempio 3, vicino alle abitazioni",
  "js.place.contrada4": "Contrada di esempio 4",
- "js.place.zona5": "Zona produttiva di esempio 5"
+ "js.place.zona5": "Zona produttiva di esempio 5",
+ "js.o.natura": "Aree Natura 2000 (EEA)",
+ "js.o.ied": "Impianti industriali (EEA)"
 };
   var SUPPORTED = ["it", "en", "es", "fr", "pt"];
   var lang = "it";
@@ -1065,7 +1080,7 @@ footer p{margin:0}
   var mode = "leaflet";
   var current = "ue";
   var selectedEl = null, selectedP = null;
-  var map = null, layer = null, layers = [], active = 0, errs = [], loaded = false, timer = null, ctrl = null;
+  var map = null, layer = null, layers = [], overlays = [], active = 0, errs = [], loaded = false, timer = null, ctrl = null;
 
   /* ---------- Lingua ---------- */
   var defaults = new WeakMap();
@@ -1221,12 +1236,31 @@ footer p{margin:0}
       useFallback();
     }
   }
+  // Livelli facoltativi con dati reali dell'Agenzia europea dell'ambiente (servizi di mappa pubblici ArcGIS)
+  var NATURA_URL = "https://bio.discomap.eea.europa.eu/arcgis/rest/services/ProtectedSites/Natura2000Sites/MapServer";
+  var IED_URL = "https://air.discomap.eea.europa.eu/arcgis/rest/services/Air/IED_SiteMap/MapServer";
+  function makeExportLayer(url, show, attr){
+    var Ctor = L.TileLayer.extend({
+      getTileUrl: function(coords){
+        var b = this._tileCoordsToBounds(coords);
+        var sw = L.CRS.EPSG3857.project(b.getSouthWest());
+        var ne = L.CRS.EPSG3857.project(b.getNorthEast());
+        var s = this.getTileSize();
+        return url + "/export?bbox=" + [sw.x, sw.y, ne.x, ne.y].join(",") +
+          "&bboxSR=3857&imageSR=3857&size=" + s.x + "," + s.y +
+          "&dpi=96&format=png32&transparent=true&layers=show:" + show + "&f=image";
+      }
+    });
+    return new Ctor("", {attribution: attr, zIndex: 5, opacity: 0.85, maxZoom: 19, noWrap: true});
+  }
   function buildControl(){
     if (ctrl) map.removeControl(ctrl);
-    var base = {};
+    var base = {}, over = {};
     base[t("js.l.fisica")] = layers[0];
     base[t("js.l.stradale")] = layers[1];
-    ctrl = L.control.layers(base, null, {collapsed:false}).addTo(map);
+    over[t("js.o.natura")] = overlays[0];
+    over[t("js.o.ied")] = overlays[1];
+    ctrl = L.control.layers(base, over, {collapsed:false}).addTo(map);
   }
   function initLeaflet(){
     map = L.map("map", {scrollWheelZoom:false, worldCopyJump:true})
@@ -1234,6 +1268,10 @@ footer p{margin:0}
     layer = L.layerGroup().addTo(map);
     for (var i = 0; i < PROVIDERS.length; i++) layers.push(makeLayer(i));
     layers[0].addTo(map);
+    overlays.push(makeExportLayer(NATURA_URL, "0,1",
+      '&copy; <a href="https://www.eea.europa.eu/">European Environment Agency</a> (Natura 2000)'));
+    overlays.push(makeExportLayer(IED_URL, "0",
+      '&copy; <a href="https://industry.eea.europa.eu/">European Environment Agency</a> (Industrial Emissions Portal)'));
     buildControl();
     map.on("baselayerchange", function(e){
       var i = layers.indexOf(e.layer);
