@@ -23,7 +23,7 @@ Versione online (GitHub Pages): https://nalomb2009.github.io/eia-sea-atlas/
 - Pagina unica in HTML, CSS e JavaScript, senza framework e senza server.
 - Mappa con [Leaflet](https://leafletjs.com): carta fisica con rilievo ([OpenTopoMap](https://opentopomap.org)) e carta stradale ([OpenStreetMap](https://www.openstreetmap.org)), con selettore.
 - Tre scale di partenza: Unione europea, Paese, Comune.
-- Due livelli facoltativi con dati reali dell'Agenzia europea dell'ambiente (EEA): aree Natura 2000 e siti industriali del Portale europeo sulle emissioni industriali. Questi dati non indicano lo stato delle autorizzazioni e restano separati dai punti dimostrativi.
+- Collegamenti ai portali ufficiali: Portale europeo sulle emissioni industriali, mappa Natura 2000 e geoportale INSPIRE. Il prototipo non ne usa i dati: i punti sulla mappa sono inventati.
 - Cinque lingue (italiano, inglese, spagnolo, francese, portoghese), scelte dal selettore in alto a destra o con un link diretto, per esempio `?lang=en`. Le traduzioni vanno riviste da madrelingua.
 - Tre stati delle opere (titoli in regola, procedimento in corso, titoli mancanti), distinti da colore **e** forma.
 - Scheda dell'opera con codice identificativo, posizione, responsabile, amministrazioni competenti e stato di ogni titolo.
@@ -48,7 +48,7 @@ Ogni punto è `[latitudine, longitudine, stato, modello, codice, posizione]`, co
 
 Apri una *Issue* per proporre un'idea o segnalare un problema, oppure una *Pull Request* con una modifica. Cose da fare:
 
-- [ ] Collegare dati reali: servizi INSPIRE nazionali (da verificare uno per uno, le condizioni d'uso cambiano) e dati del Portale europeo sulle emissioni industriali oltre alla sola visualizzazione
+- [ ] Collegare dati reali: servizi INSPIRE nazionali (da verificare uno per uno, le condizioni d'uso cambiano) e dati del Portale europeo sulle emissioni industriali. Prima prova: i servizi di mappa dell'EEA erano troppo lenti per un uso diretto, meglio scaricare i dati e servirli dal sito
 - [ ] Definire lo schema del codice europeo unico dell'opera
 - [ ] Ricerca per territorio, indirizzo, tipologia di attività e soggetto responsabile
 - [ ] Elenco e download dei documenti del fascicolo, con storico di rilasci, modifiche, rinnovi, sospensioni e revoche
@@ -62,7 +62,6 @@ Apri una *Issue* per proporre un'idea o segnalare un problema, oppure una *Pull 
 
 - **Leaflet 1.9.4**: licenza BSD a due clausole.
 - **OpenTopoMap** (carta fisica con rilievo): stile con licenza CC-BY-SA, dati OpenStreetMap e SRTM, attribuzione già nel codice. Il servizio ha limiti d'uso: per molto traffico serve un fornitore dedicato.
-- **Dati EEA** (Natura 2000 e siti industriali): servizi di mappa pubblici dell'Agenzia europea dell'ambiente. Il riutilizzo è consentito citando la fonte (attribuzione già nel codice), salvo condizioni specifiche del singolo dataset da verificare.
 - **OpenStreetMap**: dati con licenza ODbL, con obbligo di citare i contributori (già presente nel codice).
 - **CARTO** (carte di riserva basate su OpenStreetMap): richiede attribuzione; prima di un uso stabile vanno verificate le condizioni d'uso.
 - **Literata** e **Public Sans**: caratteri caricati da Google Fonts, licenza SIL Open Font.
