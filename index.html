@@ -97,6 +97,9 @@ a{color:var(--teal)}
 @media (max-width:860px){#map{height:380px}}
 #fallback{display:block;width:100%;height:auto;background:var(--map);border-radius:6px}
 #fallback .contour{fill:none;stroke:var(--line);stroke-width:1.5}
+.real{margin:.9rem 0 0}
+.realbtn{font:inherit;font-size:.92rem;background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:8px;padding:.5rem .9rem;cursor:pointer}
+.realbtn:disabled{opacity:.6;cursor:wait}
 .map-note{font-size:.88rem;color:var(--muted);margin:.75rem 0 0}
 .leaflet-container{font-family:inherit}
 
@@ -243,6 +246,10 @@ footer p{margin:0}
           <a id="osmlink" href="https://www.openstreetmap.org/" target="_blank" rel="noopener" data-i18n="fb.link">Apri questa zona su OpenStreetMap</a>
         </p>
 
+        <div class="real" id="real">
+          <button type="button" id="loadReal" class="realbtn">Carica impianti reali (EEA, sperimentale)</button>
+          <p class="map-note" id="realMsg" role="status" aria-live="polite"></p>
+        </div>
         <ul class="legend" aria-label="Legenda" data-i18n-attr="aria-label:legend.aria">
           <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="9" fill="var(--teal)"/></svg><span data-i18n="legend.ok">Titoli in regola</span></li>
           <li><svg viewBox="-12 -12 24 24" aria-hidden="true"><path d="M0,-11 L11,0 L0,11 L-11,0Z" fill="var(--amber)"/></svg><span data-i18n="legend.proc">Procedimento in corso</span></li>
@@ -534,7 +541,22 @@ footer p{margin:0}
   "ex.p3": "Below you will find the official portals, which open in a new tab. This prototype does not use their data: the points on the map are invented.",
   "ex.l1": "European Industrial Emissions Portal",
   "ex.l2": "Natura 2000 map viewer",
-  "ex.l3": "INSPIRE Geoportal"
+  "ex.l3": "INSPIRE Geoportal",
+  "js.real.load": "Load real industrial sites (EEA, experimental)",
+  "js.real.hide": "Hide real industrial sites",
+  "js.real.hint": "Zoom the map into an area (at least province level) and tap the button to load the real industrial sites from the EEA portal. Experimental feature: it depends on the EEA service.",
+  "js.real.zoom": "Zoom in further: sites are only loaded from a close-up view.",
+  "js.real.loading": "Loading from the EEA service…",
+  "js.real.done": "Sites loaded: {n}. Tap one to see its data.",
+  "js.real.more": "Sites loaded: {n}. There are more: zoom in to see them.",
+  "js.real.none": "No sites in this area.",
+  "js.real.err": "The EEA service is not responding or cannot be reached from this browser. Try again later.",
+  "js.real.pop.src": "Official data from the European Industrial Emissions Portal (EEA)",
+  "js.real.pop.act": "Activity",
+  "js.real.pop.permit": "Latest permit reported",
+  "js.real.pop.country": "Country",
+  "js.real.pop.note": "Data are reported by Member States and may be incomplete: if information is missing, it does not mean the permit is missing.",
+  "js.real.pop.nodata": "data not available"
  },
  "es": {
   "nav.problem": "El problema",
@@ -674,7 +696,22 @@ footer p{margin:0}
   "ex.p3": "Aquí abajo encontrarás los portales oficiales, que se abren en una pestaña nueva. Este prototipo no utiliza sus datos: los puntos del mapa son inventados.",
   "ex.l1": "Portal Europeo de Emisiones Industriales",
   "ex.l2": "Visor de mapas Natura 2000",
-  "ex.l3": "Geoportal INSPIRE"
+  "ex.l3": "Geoportal INSPIRE",
+  "js.real.load": "Cargar instalaciones reales (AEMA, experimental)",
+  "js.real.hide": "Ocultar instalaciones reales",
+  "js.real.hint": "Amplía el mapa sobre una zona (al menos a nivel de provincia) y pulsa el botón para cargar las instalaciones reales del portal de la AEMA. Función experimental: depende del servicio de la AEMA.",
+  "js.real.zoom": "Amplía más: las instalaciones solo se cargan desde una vista cercana.",
+  "js.real.loading": "Cargando desde el servicio de la AEMA…",
+  "js.real.done": "Instalaciones cargadas: {n}. Toca una para ver sus datos.",
+  "js.real.more": "Instalaciones cargadas: {n}. Hay más: amplía para verlas.",
+  "js.real.none": "No hay instalaciones en esta zona.",
+  "js.real.err": "El servicio de la AEMA no responde o no es accesible desde este navegador. Inténtalo más tarde.",
+  "js.real.pop.src": "Dato oficial del Portal Europeo de Emisiones Industriales (AEMA)",
+  "js.real.pop.act": "Actividad",
+  "js.real.pop.permit": "Última autorización comunicada",
+  "js.real.pop.country": "País",
+  "js.real.pop.note": "Los datos los comunican los Estados y pueden estar incompletos: si falta una información, no significa que falte la autorización.",
+  "js.real.pop.nodata": "dato no disponible"
  },
  "fr": {
   "nav.problem": "Le problème",
@@ -814,7 +851,22 @@ footer p{margin:0}
   "ex.p3": "Vous trouverez ci-dessous les portails officiels, qui s’ouvrent dans un nouvel onglet. Ce prototype n’utilise pas leurs données : les points de la carte sont inventés.",
   "ex.l1": "Portail européen des émissions industrielles",
   "ex.l2": "Visionneuse cartographique Natura 2000",
-  "ex.l3": "Géoportail INSPIRE"
+  "ex.l3": "Géoportail INSPIRE",
+  "js.real.load": "Charger les sites industriels réels (AEE, expérimental)",
+  "js.real.hide": "Masquer les sites industriels réels",
+  "js.real.hint": "Zoomez sur une zone (au moins à l’échelle d’un département) et touchez le bouton pour charger les sites industriels réels du portail de l’AEE. Fonction expérimentale : elle dépend du service de l’AEE.",
+  "js.real.zoom": "Zoomez davantage : les sites ne se chargent que depuis une vue rapprochée.",
+  "js.real.loading": "Chargement depuis le service de l’AEE…",
+  "js.real.done": "Sites chargés : {n}. Touchez-en un pour voir ses données.",
+  "js.real.more": "Sites chargés : {n}. Il y en a d’autres : zoomez pour les voir.",
+  "js.real.none": "Aucun site dans cette zone.",
+  "js.real.err": "Le service de l’AEE ne répond pas ou n’est pas accessible depuis ce navigateur. Réessayez plus tard.",
+  "js.real.pop.src": "Donnée officielle du Portail européen des émissions industrielles (AEE)",
+  "js.real.pop.act": "Activité",
+  "js.real.pop.permit": "Dernière autorisation communiquée",
+  "js.real.pop.country": "Pays",
+  "js.real.pop.note": "Les données sont communiquées par les États et peuvent être incomplètes : l’absence d’une information ne signifie pas que l’autorisation manque.",
+  "js.real.pop.nodata": "donnée non disponible"
  },
  "pt": {
   "nav.problem": "O problema",
@@ -954,7 +1006,22 @@ footer p{margin:0}
   "ex.p3": "Em baixo encontra os portais oficiais, que abrem num novo separador. Este protótipo não utiliza os seus dados: os pontos do mapa são inventados.",
   "ex.l1": "Portal Europeu das Emissões Industriais",
   "ex.l2": "Visualizador de mapas Natura 2000",
-  "ex.l3": "Geoportal INSPIRE"
+  "ex.l3": "Geoportal INSPIRE",
+  "js.real.load": "Carregar instalações reais (AEA, experimental)",
+  "js.real.hide": "Ocultar instalações reais",
+  "js.real.hint": "Amplie o mapa sobre uma zona (pelo menos ao nível de um distrito) e toque no botão para carregar as instalações reais do portal da AEA. Função experimental: depende do serviço da AEA.",
+  "js.real.zoom": "Amplie mais: as instalações só são carregadas numa vista aproximada.",
+  "js.real.loading": "A carregar do serviço da AEA…",
+  "js.real.done": "Instalações carregadas: {n}. Toque numa para ver os dados.",
+  "js.real.more": "Instalações carregadas: {n}. Há mais: amplie para as ver.",
+  "js.real.none": "Nenhuma instalação nesta zona.",
+  "js.real.err": "O serviço da AEA não responde ou não está acessível a partir deste navegador. Tente mais tarde.",
+  "js.real.pop.src": "Dado oficial do Portal Europeu das Emissões Industriais (AEA)",
+  "js.real.pop.act": "Atividade",
+  "js.real.pop.permit": "Última autorização comunicada",
+  "js.real.pop.country": "País",
+  "js.real.pop.note": "Os dados são comunicados pelos Estados e podem estar incompletos: se falta uma informação, não significa que falte a autorização.",
+  "js.real.pop.nodata": "dado não disponível"
  }
 };
   var JS_IT = {
@@ -1007,7 +1074,22 @@ footer p{margin:0}
  "js.place.loc2": "Località di esempio 2",
  "js.place.via3": "Via di esempio 3, vicino alle abitazioni",
  "js.place.contrada4": "Contrada di esempio 4",
- "js.place.zona5": "Zona produttiva di esempio 5"
+ "js.place.zona5": "Zona produttiva di esempio 5",
+ "js.real.load": "Carica impianti reali (EEA, sperimentale)",
+ "js.real.hide": "Nascondi impianti reali",
+ "js.real.hint": "Ingrandisci la mappa su una zona (almeno al livello di una provincia) e tocca il pulsante per caricare gli impianti reali del portale EEA. Funzione sperimentale: dipende dal servizio dell’EEA.",
+ "js.real.zoom": "Ingrandisci ancora: gli impianti si caricano solo da una vista ravvicinata.",
+ "js.real.loading": "Caricamento dal servizio dell’EEA…",
+ "js.real.done": "Impianti caricati: {n}. Toccane uno per vedere i dati.",
+ "js.real.more": "Impianti caricati: {n}. Ce ne sono altri: ingrandisci per vederli.",
+ "js.real.none": "Nessun impianto in quest’area.",
+ "js.real.err": "Il servizio dell’EEA non risponde o non è raggiungibile da questo browser. Riprova più tardi.",
+ "js.real.pop.src": "Dato ufficiale del Portale europeo sulle emissioni industriali (EEA)",
+ "js.real.pop.act": "Attività",
+ "js.real.pop.permit": "Ultima autorizzazione comunicata",
+ "js.real.pop.country": "Paese",
+ "js.real.pop.note": "I dati sono comunicati dagli Stati e possono essere incompleti: se un’informazione manca, non significa che l’autorizzazione manchi.",
+ "js.real.pop.nodata": "dato non disponibile"
 };
   var SUPPORTED = ["it", "en", "es", "fr", "pt"];
   var lang = "it";
@@ -1075,6 +1157,10 @@ footer p{margin:0}
      attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}
   ];
 
+  // Servizio pubblico dell'Agenzia europea dell'ambiente: siti del Portale sulle emissioni industriali
+  var IED_URL = "https://air.discomap.eea.europa.eu/arcgis/rest/services/Air/IED_SiteMap/MapServer";
+  var REAL_MIN_ZOOM = 9, REAL_LIMIT = 500;
+
   var fileEl = document.getElementById("file");
   var captionEl = document.getElementById("caption");
   var mapEl = document.getElementById("map");
@@ -1083,12 +1169,16 @@ footer p{margin:0}
   var noteEl = document.getElementById("mapnote");
   var osmLink = document.getElementById("osmlink");
   var langSel = document.getElementById("lang");
+  var realBox = document.getElementById("real");
+  var realBtn = document.getElementById("loadReal");
+  var realMsg = document.getElementById("realMsg");
   var buttons = document.querySelectorAll(".scale button");
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var mode = "leaflet";
   var current = "ue";
   var selectedEl = null, selectedP = null;
+  var realLayer = null, realOn = false, realState = "idle", realN = 0;
   var map = null, layer = null, layers = [], active = 0, errs = [], loaded = false, timer = null, ctrl = null;
 
   /* ---------- Lingua ---------- */
@@ -1142,6 +1232,7 @@ footer p{margin:0}
       } catch(e){}
     }
     captionEl.textContent = t(VIEWS[current].cap);
+    updateRealUi();
     if (map) buildControl();
     renderPoints(current);
     if (selectedP) showFile(selectedP); else fileEl.innerHTML = emptyHtml();
@@ -1263,7 +1354,82 @@ footer p{margin:0}
       var i = layers.indexOf(e.layer);
       if (i >= 0){ active = i; errs[i] = 0; }
     });
+    initReal();
     timer = setTimeout(function(){ if (!loaded) useFallback(); }, 9000);
+  }
+
+  /* ---------- Impianti reali dell'EEA (sperimentale) ---------- */
+  function realText(){
+    var k = {idle:"js.real.hint", zoom:"js.real.zoom", loading:"js.real.loading", done:"js.real.done",
+             more:"js.real.more", none:"js.real.none", err:"js.real.err"}[realState];
+    return t(k).replace("{n}", realN);
+  }
+  function updateRealUi(){
+    if (!realBtn) return;
+    realBtn.textContent = t(realOn ? "js.real.hide" : "js.real.load");
+    realMsg.textContent = realText();
+  }
+  function realPopup(p){
+    var box = document.createElement("div");
+    function row(label, value){
+      var d = document.createElement("div");
+      var b = document.createElement("strong"); b.textContent = label + ": ";
+      d.appendChild(b); d.appendChild(document.createTextNode(value)); box.appendChild(d);
+    }
+    var h = document.createElement("strong"); h.textContent = p.siteName || "—"; box.appendChild(h);
+    var permit = t("js.real.pop.nodata");
+    if (p.dateOfLatestPermit){
+      try { permit = new Date(p.dateOfLatestPermit).toLocaleDateString(lang === "pt" ? "pt-PT" : lang); } catch(e){}
+    }
+    row(t("js.real.pop.country"), p.countryCode || t("js.real.pop.nodata"));
+    row(t("js.real.pop.act"), p.eea_activities || t("js.real.pop.nodata"));
+    row(t("js.real.pop.permit"), permit);
+    var s = document.createElement("div"); s.style.cssText = "margin-top:.4rem;font-size:.85em";
+    s.textContent = t("js.real.pop.src"); box.appendChild(s);
+    var n = document.createElement("div"); n.style.cssText = "margin-top:.3rem;font-size:.85em";
+    n.textContent = t("js.real.pop.note"); box.appendChild(n);
+    return box;
+  }
+  function loadReal(){
+    var b = map.getBounds();
+    var url = IED_URL + "/0/query?where=1%3D1&geometry=" + [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()].join(",") +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=siteName,countryCode,eea_activities,dateOfLatestPermit&returnGeometry=true&outSR=4326" +
+      "&resultRecordCount=" + REAL_LIMIT + "&f=geojson";
+    var finished = false, abort = window.AbortController ? new AbortController() : null;
+    function end(state, n){
+      if (finished) return;
+      finished = true; clearTimeout(timeout);
+      realState = state; realN = n || 0; realBtn.disabled = false; updateRealUi();
+    }
+    var timeout = setTimeout(function(){ if (abort) abort.abort(); end("err"); }, 15000);
+    realState = "loading"; realBtn.disabled = true; updateRealUi();
+    fetch(url, abort ? {signal: abort.signal} : {})
+      .then(function(r){ if (!r.ok) throw new Error("http " + r.status); return r.json(); })
+      .then(function(data){
+        if (finished) return;
+        if (!data || data.error || !data.features) throw new Error("risposta non valida");
+        realLayer.clearLayers();
+        data.features.forEach(function(f){
+          if (!f.geometry || f.geometry.type !== "Point") return;
+          var c = f.geometry.coordinates;
+          var m = L.circleMarker([c[1], c[0]], {radius:6, color:"#ffffff", weight:1.5, fillColor:"#5E6B73", fillOpacity:0.9});
+          m.bindPopup(realPopup(f.properties || {}));
+          m.addTo(realLayer);
+        });
+        var n = data.features.length;
+        realOn = n > 0;
+        end(n === 0 ? "none" : ((data.exceededTransferLimit || n >= REAL_LIMIT) ? "more" : "done"), n);
+      })
+      .catch(function(){ end("err"); });
+  }
+  function initReal(){
+    realLayer = L.layerGroup().addTo(map);
+    realBtn.addEventListener("click", function(){
+      if (realOn){ realLayer.clearLayers(); realOn = false; realState = "idle"; updateRealUi(); return; }
+      if (map.getZoom() < REAL_MIN_ZOOM){ realState = "zoom"; updateRealUi(); return; }
+      loadReal();
+    });
   }
 
   /* ---------- Mappa schematica (se quella dettagliata non si carica) ---------- */
@@ -1302,6 +1468,7 @@ footer p{margin:0}
     mapEl.setAttribute("hidden", "");
     fbEl.removeAttribute("hidden");
     noteEl.removeAttribute("hidden");
+    realBox.setAttribute("hidden", "");
     updateOsmLink();
     renderFallback(current);
     reselect();

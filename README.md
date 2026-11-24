@@ -24,6 +24,7 @@ Versione online (GitHub Pages): https://nalomb2009.github.io/eia-sea-atlas/
 - Mappa con [Leaflet](https://leafletjs.com): carta fisica con rilievo ([OpenTopoMap](https://opentopomap.org)) e carta stradale ([OpenStreetMap](https://www.openstreetmap.org)), con selettore.
 - Tre scale di partenza: Unione europea, Paese, Comune.
 - Collegamenti ai portali ufficiali: Portale europeo sulle emissioni industriali, mappa Natura 2000 e geoportale INSPIRE. Il prototipo non ne usa i dati: i punti sulla mappa sono inventati.
+- Pulsante sperimentale "Carica impianti reali (EEA)": interroga il servizio di mappa dell'Agenzia europea dell'ambiente (`IED_SiteMap`) per la zona visibile, da zoom 9 in poi, fino a 500 siti, e mostra per ognuno nome, attività e data dell'ultima autorizzazione comunicata. Non è stato provato sul campo: se il servizio non risponde, la pagina lo dice. I dati sono comunicati dagli Stati e possono essere incompleti.
 - Cinque lingue (italiano, inglese, spagnolo, francese, portoghese), scelte dal selettore in alto a destra o con un link diretto, per esempio `?lang=en`. Le traduzioni vanno riviste da madrelingua.
 - Tre stati delle opere (titoli in regola, procedimento in corso, titoli mancanti), distinti da colore **e** forma.
 - Scheda dell'opera con codice identificativo, posizione, responsabile, amministrazioni competenti e stato di ogni titolo.
@@ -48,7 +49,7 @@ Ogni punto è `[latitudine, longitudine, stato, modello, codice, posizione]`, co
 
 Apri una *Issue* per proporre un'idea o segnalare un problema, oppure una *Pull Request* con una modifica. Cose da fare:
 
-- [ ] Collegare dati reali: servizi INSPIRE nazionali (da verificare uno per uno, le condizioni d'uso cambiano) e dati del Portale europeo sulle emissioni industriali. Prima prova: i servizi di mappa dell'EEA erano troppo lenti per un uso diretto, meglio scaricare i dati e servirli dal sito
+- [ ] Collegare dati reali: servizi INSPIRE nazionali (da verificare uno per uno, le condizioni d'uso cambiano) e dati del Portale europeo sulle emissioni industriali. Il pulsante sperimentale dipende da un servizio dell'EEA che in alcune prove restava in caricamento: verificarne l'affidabilità, o scaricare i dati e servirli dal sito
 - [ ] Definire lo schema del codice europeo unico dell'opera
 - [ ] Ricerca per territorio, indirizzo, tipologia di attività e soggetto responsabile
 - [ ] Elenco e download dei documenti del fascicolo, con storico di rilasci, modifiche, rinnovi, sospensioni e revoche
