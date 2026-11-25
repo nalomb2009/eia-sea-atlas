@@ -1,0 +1,153 @@
+<!--
+  EIA-SEA Atlas — due aggiunte da incollare in index.html
+  1) CASELLA DI RICERCA: incolla il blocco A subito sopra l'elemento che contiene la mappa.
+  2) GUIDA + GLOSSARIO: incolla il blocco B prima della sezione "Contribuisci" (o dentro).
+  Il blocco C (script) va prima di </body>, dopo lo script che crea la mappa.
+  Presuppone una mappa Leaflet salvata in una variabile chiamata `map`.
+  Se si chiama in altro modo, cambia solo la riga "const mappa = ..." nello script.
+-->
+
+<!-- ============ A. CASELLA DI RICERCA ============ -->
+<style>
+  .atlas-cerca { display: flex; gap: .5rem; margin: 0 0 .75rem; max-width: 34rem; }
+  .atlas-cerca input {
+    flex: 1; min-width: 0; padding: .6rem .8rem; font: inherit;
+    border: 1px solid currentColor; border-radius: 6px;
+    background: transparent; color: inherit;
+  }
+  .atlas-cerca button {
+    padding: .6rem 1rem; font: inherit; cursor: pointer;
+    border: 1px solid currentColor; border-radius: 6px;
+    background: transparent; color: inherit;
+  }
+  .atlas-cerca input:focus-visible, .atlas-cerca button:focus-visible { outline: 3px solid #1f6feb; outline-offset: 2px; }
+  .atlas-cerca-esito { min-height: 1.4em; margin: 0 0 .75rem; font-size: .95rem; }
+</style>
+
+<form class="atlas-cerca" id="atlas-cerca" role="search">
+  <label for="atlas-cerca-q" class="sr-only" style="position:absolute;left:-9999px">Cerca un comune o un indirizzo</label>
+  <input id="atlas-cerca-q" type="search" placeholder="Cerca un comune o un indirizzo" autocomplete="off" enterkeyhint="search">
+  <button type="submit">Cerca</button>
+</form>
+<p class="atlas-cerca-esito" id="atlas-cerca-esito" aria-live="polite"></p>
+
+<!-- ============ B. GUIDA PER COLLABORARE + GLOSSARIO ============ -->
+<style>
+  .atlas-guida details { border-top: 1px solid currentColor; padding: .75rem 0; }
+  .atlas-guida details:last-of-type { border-bottom: 1px solid currentColor; }
+  .atlas-guida summary { cursor: pointer; font-weight: 600; }
+  .atlas-guida dl { margin: .75rem 0 0; }
+  .atlas-guida dt { font-weight: 600; margin-top: .75rem; }
+  .atlas-guida dd { margin: .15rem 0 0; max-width: 60ch; }
+  .atlas-guida .nota { font-size: .95rem; max-width: 60ch; }
+</style>
+
+<section class="atlas-guida" id="guida">
+  <h2>Come collaborare</h2>
+  <p class="nota">Non serve saper programmare. Scegli il modo che ti è più vicino.</p>
+
+  <details>
+    <summary>Traduci o controlla una traduzione</summary>
+    <p>Il sito è in italiano, inglese, spagnolo, francese e portoghese. Cerchiamo madrelingua che leggano i testi e, soprattutto, il glossario qui sotto: i termini tecnici non si traducono parola per parola, perché ogni Paese ha il suo nome ufficiale per ogni procedura.</p>
+    <ol>
+      <li>Apri il codice su GitHub e trova il file della tua lingua.</li>
+      <li>Leggi i testi e segna ciò che suona innaturale o impreciso.</li>
+      <li>Apri una segnalazione (Issue) con la correzione, oppure proponila direttamente.</li>
+    </ol>
+  </details>
+
+  <details>
+    <summary>Conosci i procedimenti ambientali del tuo Paese</summary>
+    <p>Dicci qual è il nome ufficiale di ogni procedura nel tuo Paese, quale ente la rilascia e dove si consultano i documenti. Un esempio vale più di una spiegazione lunga.</p>
+  </details>
+
+  <details>
+    <summary>Lavori con dati o mappe</summary>
+    <p>Ci servono persone che sappiano collegare le fonti pubbliche (EEA, INSPIRE, Natura 2000) alla mappa e che segnalino cosa manca nei dati. Scrivi nelle Issue su GitHub cosa vorresti provare.</p>
+  </details>
+
+  <details>
+    <summary>Segnala un errore o un'idea</summary>
+    <p>Apri una Issue su GitHub: basta una frase. Indica che cosa hai trovato e, se puoi, in quale pagina.</p>
+  </details>
+
+  <h3>Glossario</h3>
+  <p class="nota">Bozza in italiano, da far verificare a madrelingua in inglese, spagnolo, francese e portoghese.</p>
+  <dl>
+    <dt>VIA — Valutazione di impatto ambientale (EIA)</dt>
+    <dd>Procedura che valuta, prima della realizzazione, gli effetti di un progetto sull'ambiente.</dd>
+
+    <dt>VAS — Valutazione ambientale strategica (SEA)</dt>
+    <dd>Come la VIA, ma per piani e programmi, non per il singolo progetto.</dd>
+
+    <dt>Verifica di assoggettabilità</dt>
+    <dd>Controllo preliminare che stabilisce se un progetto o un piano deve fare la VIA o la VAS.</dd>
+
+    <dt>AIA — Autorizzazione integrata ambientale</dt>
+    <dd>Autorizzazione unica per gli impianti industriali più rilevanti, che include emissioni in aria, scarichi, rifiuti e rumore.</dd>
+
+    <dt>VIncA — Valutazione di incidenza ambientale</dt>
+    <dd>Valuta gli effetti su habitat e specie protetti nei siti Natura 2000.</dd>
+
+    <dt>Natura 2000</dt>
+    <dd>Rete europea di aree protette per habitat e specie di interesse comunitario.</dd>
+
+    <dt>Titolo autorizzativo</dt>
+    <dd>Qualunque autorizzazione, concessione o parere che un'opera deve avere per essere realizzata o per funzionare.</dd>
+
+    <dt>Fascicolo</dt>
+    <dd>L'insieme dei documenti di un'opera: procedimenti, titoli, prescrizioni, controlli e storico.</dd>
+
+    <dt>INSPIRE</dt>
+    <dd>Direttiva e infrastruttura europea per condividere dati territoriali e ambientali.</dd>
+
+    <dt>EEA — Agenzia europea dell'ambiente</dt>
+    <dd>Agenzia dell'Unione europea che raccoglie e pubblica dati ambientali, tra cui il Portale sulle emissioni industriali.</dd>
+  </dl>
+</section>
+
+<!-- ============ C. SCRIPT DELLA RICERCA ============ -->
+<script>
+(function () {
+  // Se la tua mappa Leaflet ha un altro nome, cambia qui:
+  const mappa = window.map;
+
+  const form = document.getElementById('atlas-cerca');
+  const campo = document.getElementById('atlas-cerca-q');
+  const esito = document.getElementById('atlas-cerca-esito');
+  let segnaposto = null;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const q = campo.value.trim();
+    if (!q || !mappa) return;
+
+    esito.textContent = 'Cerco…';
+    try {
+      // Nominatim (OpenStreetMap): una richiesta per invio, mai a ogni tasto premuto.
+      const lingua = document.documentElement.lang || 'it';
+      const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language='
+        + encodeURIComponent(lingua) + '&q=' + encodeURIComponent(q);
+      const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const dati = await r.json();
+
+      if (!dati.length) {
+        esito.textContent = 'Nessun risultato. Prova con il nome del comune o con via e numero civico.';
+        return;
+      }
+
+      const t = dati[0];
+      const [s, n, o, e2] = t.boundingbox.map(Number); // sud, nord, ovest, est
+      mappa.fitBounds([[s, o], [n, e2]], { maxZoom: 16 });
+
+      if (segnaposto) mappa.removeLayer(segnaposto);
+      segnaposto = L.circleMarker([Number(t.lat), Number(t.lon)], { radius: 8, weight: 3, fillOpacity: 0.2 }).addTo(mappa);
+
+      esito.textContent = t.display_name;
+    } catch (err) {
+      esito.textContent = 'La ricerca non è riuscita. Controlla la connessione e riprova.';
+    }
+  });
+})();
+</script>

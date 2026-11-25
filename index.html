@@ -179,6 +179,37 @@ footer p{margin:0}
   html{scroll-behavior:auto}
   *{transition:none !important;animation:none !important}
 }
+/* ---- Ricerca di luoghi e opere ---- */
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none !important}
+.finder{margin:0 0 .9rem}
+.findrow{display:flex;gap:.5rem;flex-wrap:wrap;margin:0}
+.findrow.works{margin-top:.6rem}
+.findrow input[type="search"]{flex:1 1 12rem;min-width:0;font:inherit;font-size:.95rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.5rem .7rem}
+.findrow select{flex:1 1 9rem;min-width:0;font:inherit;font-size:.92rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem}
+.findbtn{font:inherit;font-size:.92rem;background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:8px;padding:.5rem .9rem;cursor:pointer}
+.find-msg{font-size:.88rem;color:var(--muted);margin:.4rem 0 0}
+.works-list{list-style:none;margin:.5rem 0 0;padding:0;max-height:15rem;overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.works-list li+li{border-top:1px solid var(--line)}
+.works-list button{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;color:var(--ink);background:transparent;border:0;padding:.55rem .75rem;cursor:pointer}
+.works-list button:hover{background:var(--bg)}
+.wl-t{display:block;font-weight:600}
+.wl-s{display:block;color:var(--muted)}
+.wl-s svg{display:block;width:14px;height:14px}
+.st{display:inline-block;vertical-align:-2px;margin-right:.35rem}
+.st.ok{color:var(--teal)} .st.proc{color:var(--amber)} .st.irr{color:var(--red)}
+.leaflet-marker-icon.dim,.fb-pt.dim{opacity:.22}
+
+/* ---- Guida e glossario ---- */
+.gd{border-top:1px solid var(--line);padding:.8rem 0}
+.gd:last-of-type{border-bottom:1px solid var(--line)}
+.gd summary{cursor:pointer;font-weight:600}
+.gd p{margin:.6rem 0 0;color:var(--muted)}
+#collabora .prose h3{font-size:1.2rem;margin:2rem 0 .4rem}
+.note-sm{font-size:.9rem;color:var(--muted);margin:0}
+.gloss{margin:1rem 0 0}
+.gloss dt{font-weight:600;margin-top:1rem}
+.gloss dd{margin:.15rem 0 0;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -223,6 +254,27 @@ footer p{margin:0}
             <button type="button" data-view="comune" aria-pressed="false" data-i18n="scale.municipality">Comune</button>
           </div>
           <p class="caption" id="caption"></p>
+        </div>
+
+        <div class="finder">
+          <div id="placeBox">
+            <form class="findrow" id="placeForm" role="search">
+              <label class="sr" for="placeQ" data-i18n="find.place.label">Cerca un comune o un indirizzo</label>
+              <input id="placeQ" type="search" autocomplete="off" enterkeyhint="search" placeholder="Cerca un comune o un indirizzo" data-i18n-attr="placeholder:find.place.ph">
+              <button class="findbtn" type="submit" data-i18n="find.place.btn">Cerca</button>
+            </form>
+            <p class="find-msg" id="placeMsg" role="status" aria-live="polite"></p>
+          </div>
+          <form class="findrow works" id="worksForm" role="search">
+            <label class="sr" for="worksQ" data-i18n="find.works.label">Cerca tra le opere</label>
+            <input id="worksQ" type="search" autocomplete="off" enterkeyhint="search" placeholder="Es. rifiuti, codice, luogo, società" data-i18n-attr="placeholder:find.works.ph">
+            <select id="worksType" aria-label="Tipo di attività" data-i18n-attr="aria-label:find.works.type"></select>
+            <select id="worksState" aria-label="Stato" data-i18n-attr="aria-label:find.works.state"></select>
+            <button class="findbtn" type="button" id="worksReset" hidden data-i18n="js.w.reset">Azzera la ricerca</button>
+          </form>
+          <p class="find-msg" id="worksMsg" role="status" aria-live="polite"></p>
+          <ul class="works-list" id="worksList" hidden></ul>
+          <p class="find-msg" data-i18n="find.works.note">Cerca anche per titolo autorizzativo o per soggetto responsabile. Nella dimostrazione il soggetto responsabile è lo stesso per tutte le opere.</p>
         </div>
 
         <!-- Mappa dettagliata (Leaflet + OpenStreetMap) -->
@@ -386,6 +438,55 @@ footer p{margin:0}
           <p data-i18n="con.p1">Questo è un prototipo aperto: la mappa e i dati che vedi sono dimostrativi. Servono persone che sappiano programmare, lavorare con i dati ambientali e territoriali o conoscano i procedimenti amministrativi.</p>
           <p data-i18n="con.p2">Il codice è pubblico. Puoi leggere l’elenco delle cose da fare, proporre un’idea o segnalare un problema.</p>
           <a class="btn" href="https://github.com/nalomb2009/eia-sea-atlas" target="_blank" rel="noopener" data-i18n="con.btn">Vai al codice su GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="collabora">
+      <div class="two">
+        <h2 data-i18n="gd.h">Come collaborare</h2>
+        <div class="prose">
+          <p data-i18n="gd.lead">Non serve saper programmare. Scegli il modo che ti è più vicino.</p>
+          <details class="gd">
+            <summary data-i18n="gd.1.h">Traduci o controlla una traduzione</summary>
+            <p data-i18n="gd.1.p">Il sito è in italiano, inglese, spagnolo, francese e portoghese. Cerchiamo madrelingua che leggano i testi e, soprattutto, il glossario qui sotto: i termini tecnici non si traducono parola per parola, perché ogni Paese ha il proprio nome ufficiale per ogni procedura. Apri il codice su GitHub: i testi di ogni lingua sono nel file index.html. Proponi la correzione con una segnalazione (Issue) o con una modifica.</p>
+          </details>
+          <details class="gd">
+            <summary data-i18n="gd.2.h">Conosci i procedimenti ambientali del tuo Paese</summary>
+            <p data-i18n="gd.2.p">Dicci come si chiama ogni procedura nel tuo Paese, quale ente la rilascia e dove si consultano i documenti. Un esempio concreto vale più di una spiegazione lunga.</p>
+          </details>
+          <details class="gd">
+            <summary data-i18n="gd.3.h">Lavori con dati o mappe</summary>
+            <p data-i18n="gd.3.p">Ci servono persone che sappiano collegare le fonti pubbliche (EEA, INSPIRE, Natura 2000) alla mappa e che segnalino cosa manca nei dati. Scrivi in una segnalazione su GitHub cosa vorresti provare.</p>
+          </details>
+          <details class="gd">
+            <summary data-i18n="gd.4.h">Segnala un errore o un’idea</summary>
+            <p data-i18n="gd.4.p">Apri una segnalazione (Issue) su GitHub: basta una frase. Indica che cosa hai trovato e, se puoi, in quale parte della pagina.</p>
+          </details>
+          <h3 data-i18n="gd.gl.h">Glossario</h3>
+          <p class="note-sm" data-i18n="gd.gl.note">Versione di lavoro in italiano, con una prima traduzione nelle altre lingue: ogni definizione va controllata da chi conosce il sistema del proprio Paese.</p>
+          <dl class="gloss">
+            <dt data-i18n="gl.via.t">VIA – Valutazione di impatto ambientale (EIA)</dt>
+            <dd data-i18n="gl.via.d">Procedura che valuta, prima della realizzazione, gli effetti di un progetto sull’ambiente.</dd>
+            <dt data-i18n="gl.vas.t">VAS – Valutazione ambientale strategica (SEA)</dt>
+            <dd data-i18n="gl.vas.d">Come la VIA, ma per piani e programmi invece che per il singolo progetto.</dd>
+            <dt data-i18n="gl.assogg.t">Verifica di assoggettabilità (screening)</dt>
+            <dd data-i18n="gl.assogg.d">Controllo preliminare che stabilisce se un progetto o un piano deve essere sottoposto a VIA o a VAS.</dd>
+            <dt data-i18n="gl.aia.t">AIA – Autorizzazione integrata ambientale</dt>
+            <dd data-i18n="gl.aia.d">Autorizzazione unica per gli impianti industriali più rilevanti: comprende emissioni in aria, scarichi, rifiuti e rumore.</dd>
+            <dt data-i18n="gl.vinca.t">VIncA – Valutazione di incidenza ambientale</dt>
+            <dd data-i18n="gl.vinca.d">Valuta gli effetti di un progetto o di un piano su habitat e specie protetti nei siti Natura 2000.</dd>
+            <dt data-i18n="gl.n2000.t">Natura 2000</dt>
+            <dd data-i18n="gl.n2000.d">Rete europea di aree protette per habitat e specie di interesse comunitario.</dd>
+            <dt data-i18n="gl.titolo.t">Titolo autorizzativo</dt>
+            <dd data-i18n="gl.titolo.d">Qualsiasi autorizzazione, concessione o altro atto che un’opera deve ottenere per essere realizzata o per funzionare.</dd>
+            <dt data-i18n="gl.fascicolo.t">Fascicolo</dt>
+            <dd data-i18n="gl.fascicolo.d">L’insieme dei documenti di un’opera: procedimenti, titoli, prescrizioni, controlli e storico.</dd>
+            <dt data-i18n="gl.inspire.t">INSPIRE</dt>
+            <dd data-i18n="gl.inspire.d">Direttiva e infrastruttura europea per condividere dati territoriali e ambientali.</dd>
+            <dt data-i18n="gl.eea.t">EEA – Agenzia europea dell’ambiente</dt>
+            <dd data-i18n="gl.eea.d">Agenzia dell’Unione europea che raccoglie e pubblica dati ambientali, tra cui quelli del Portale europeo sulle emissioni industriali.</dd>
+          </dl>
         </div>
       </div>
     </section>
@@ -556,7 +657,58 @@ footer p{margin:0}
   "js.real.pop.permit": "Latest permit reported",
   "js.real.pop.country": "Country",
   "js.real.pop.note": "Data are reported by Member States and may be incomplete: if information is missing, it does not mean the permit is missing.",
-  "js.real.pop.nodata": "data not available"
+  "js.real.pop.nodata": "data not available",
+  "find.place.label": "Search for a municipality or an address",
+  "find.place.ph": "Search for a municipality or an address",
+  "find.place.btn": "Search",
+  "find.works.label": "Search among works",
+  "find.works.ph": "E.g. waste, code, place, company",
+  "find.works.type": "Type of activity",
+  "find.works.state": "Status",
+  "find.works.alltypes": "All activities",
+  "find.works.allstates": "All statuses",
+  "find.works.note": "You can also search by permit or by responsible party. In the demonstration the responsible party is the same for every work.",
+  "js.f.searching": "Searching…",
+  "js.f.none": "No results. Try the name of the municipality, or a street and number.",
+  "js.f.err": "The search failed. Check your connection and try again.",
+  "js.w.count": "Works found: {n}",
+  "js.w.none": "No works found. Try fewer words or remove a filter.",
+  "js.w.reset": "Clear search",
+  "js.w.sc.ue": "European Union",
+  "js.w.sc.paese": "Country",
+  "js.w.sc.comune": "Municipality",
+  "gd.h": "How to contribute",
+  "gd.lead": "You don’t need to know how to program. Pick the way that suits you best.",
+  "gd.1.h": "Translate or check a translation",
+  "gd.1.p": "The site is in Italian, English, Spanish, French and Portuguese. We are looking for native speakers to read the texts and, above all, the glossary below: technical terms cannot be translated word for word, because each country has its own official name for each procedure. Open the code on GitHub: the texts of every language are in the index.html file. Propose your correction as an issue or as a change.",
+  "gd.2.h": "You know the environmental procedures of your country",
+  "gd.2.p": "Tell us what each procedure is called in your country, which body issues it and where the documents can be consulted. One concrete example is worth more than a long explanation.",
+  "gd.3.h": "You work with data or maps",
+  "gd.3.p": "We need people who can connect public sources (EEA, INSPIRE, Natura 2000) to the map and flag what is missing in the data. Write in an issue on GitHub what you would like to try.",
+  "gd.4.h": "Report an error or an idea",
+  "gd.4.p": "Open an issue on GitHub: one sentence is enough. Say what you found and, if you can, in which part of the page.",
+  "gd.gl.h": "Glossary",
+  "gd.gl.note": "Working draft in Italian, with a first translation in the other languages: each definition must be checked by someone who knows the system of their own country.",
+  "gl.via.t": "EIA – Environmental impact assessment (VIA in Italy)",
+  "gl.via.d": "Procedure that assesses a project’s effects on the environment before it is built.",
+  "gl.vas.t": "SEA – Strategic environmental assessment (VAS in Italy)",
+  "gl.vas.d": "Like the EIA, but for plans and programmes rather than for a single project.",
+  "gl.assogg.t": "Screening (verifica di assoggettabilità)",
+  "gl.assogg.d": "Preliminary check that decides whether a project or plan must undergo an EIA or SEA.",
+  "gl.aia.t": "Integrated environmental permit (AIA in Italy)",
+  "gl.aia.d": "A single permit for the largest industrial plants, covering emissions to air, discharges, waste and noise.",
+  "gl.vinca.t": "Appropriate assessment (VIncA in Italy)",
+  "gl.vinca.d": "Assesses the effects of a project or plan on protected habitats and species in Natura 2000 sites.",
+  "gl.n2000.t": "Natura 2000",
+  "gl.n2000.d": "European network of protected areas for habitats and species of Community interest.",
+  "gl.titolo.t": "Permit (titolo autorizzativo)",
+  "gl.titolo.d": "Any authorisation, concession or other act that a work must obtain in order to be built or to operate.",
+  "gl.fascicolo.t": "File (fascicolo)",
+  "gl.fascicolo.d": "All the documents of a work: procedures, permits, conditions, inspections and history.",
+  "gl.inspire.t": "INSPIRE",
+  "gl.inspire.d": "European directive and infrastructure for sharing spatial and environmental data.",
+  "gl.eea.t": "EEA – European Environment Agency",
+  "gl.eea.d": "European Union agency that collects and publishes environmental data, including the European Industrial Emissions Portal."
  },
  "es": {
   "nav.problem": "El problema",
@@ -711,7 +863,58 @@ footer p{margin:0}
   "js.real.pop.permit": "Última autorización comunicada",
   "js.real.pop.country": "País",
   "js.real.pop.note": "Los datos los comunican los Estados y pueden estar incompletos: si falta una información, no significa que falte la autorización.",
-  "js.real.pop.nodata": "dato no disponible"
+  "js.real.pop.nodata": "dato no disponible",
+  "find.place.label": "Busca un municipio o una dirección",
+  "find.place.ph": "Busca un municipio o una dirección",
+  "find.place.btn": "Buscar",
+  "find.works.label": "Buscar entre las obras",
+  "find.works.ph": "P. ej. residuos, código, lugar, empresa",
+  "find.works.type": "Tipo de actividad",
+  "find.works.state": "Estado",
+  "find.works.alltypes": "Todas las actividades",
+  "find.works.allstates": "Todos los estados",
+  "find.works.note": "También puedes buscar por autorización o por responsable. En la demostración el responsable es el mismo para todas las obras.",
+  "js.f.searching": "Buscando…",
+  "js.f.none": "Sin resultados. Prueba con el nombre del municipio o con calle y número.",
+  "js.f.err": "La búsqueda no ha funcionado. Comprueba la conexión e inténtalo de nuevo.",
+  "js.w.count": "Obras encontradas: {n}",
+  "js.w.none": "No se ha encontrado ninguna obra. Prueba con menos palabras o quita un filtro.",
+  "js.w.reset": "Borrar la búsqueda",
+  "js.w.sc.ue": "Unión Europea",
+  "js.w.sc.paese": "País",
+  "js.w.sc.comune": "Municipio",
+  "gd.h": "Cómo colaborar",
+  "gd.lead": "No hace falta saber programar. Elige la forma que te resulte más cercana.",
+  "gd.1.h": "Traduce o revisa una traducción",
+  "gd.1.p": "El sitio está en italiano, inglés, español, francés y portugués. Buscamos hablantes nativos que lean los textos y, sobre todo, el glosario de abajo: los términos técnicos no se traducen palabra por palabra, porque cada país tiene su propio nombre oficial para cada procedimiento. Abre el código en GitHub: los textos de cada idioma están en el archivo index.html. Propón tu corrección con una incidencia (issue) o con un cambio.",
+  "gd.2.h": "Conoces los procedimientos ambientales de tu país",
+  "gd.2.p": "Cuéntanos cómo se llama cada procedimiento en tu país, qué organismo lo concede y dónde se consultan los documentos. Un ejemplo concreto vale más que una explicación larga.",
+  "gd.3.h": "Trabajas con datos o mapas",
+  "gd.3.p": "Necesitamos personas que sepan conectar las fuentes públicas (AEMA, INSPIRE, Natura 2000) con el mapa y señalar qué falta en los datos. Escribe en una incidencia de GitHub qué te gustaría probar.",
+  "gd.4.h": "Comunica un error o una idea",
+  "gd.4.p": "Abre una incidencia (issue) en GitHub: basta una frase. Indica qué has encontrado y, si puedes, en qué parte de la página.",
+  "gd.gl.h": "Glosario",
+  "gd.gl.note": "Borrador de trabajo en italiano, con una primera traducción a los demás idiomas: cada definición debe revisarla alguien que conozca el sistema de su propio país.",
+  "gl.via.t": "EIA – Evaluación de impacto ambiental (VIA en Italia)",
+  "gl.via.d": "Procedimiento que evalúa, antes de su ejecución, los efectos de un proyecto sobre el medio ambiente.",
+  "gl.vas.t": "EAE – Evaluación ambiental estratégica (VAS en Italia)",
+  "gl.vas.d": "Como la EIA, pero para planes y programas en lugar de para un proyecto concreto.",
+  "gl.assogg.t": "Decisión de sometimiento (verifica di assoggettabilità)",
+  "gl.assogg.d": "Control previo que establece si un proyecto o un plan debe someterse a EIA o a EAE.",
+  "gl.aia.t": "AAI – Autorización ambiental integrada",
+  "gl.aia.d": "Autorización única para las instalaciones industriales más relevantes: incluye emisiones a la atmósfera, vertidos, residuos y ruido.",
+  "gl.vinca.t": "Evaluación de repercusiones (VIncA en Italia)",
+  "gl.vinca.d": "Evalúa los efectos de un proyecto o plan sobre hábitats y especies protegidos en los espacios de la Red Natura 2000.",
+  "gl.n2000.t": "Red Natura 2000",
+  "gl.n2000.d": "Red europea de espacios protegidos para hábitats y especies de interés comunitario.",
+  "gl.titolo.t": "Título habilitante (titolo autorizzativo)",
+  "gl.titolo.d": "Cualquier autorización, concesión u otro acto que una obra debe obtener para ejecutarse o funcionar.",
+  "gl.fascicolo.t": "Expediente (fascicolo)",
+  "gl.fascicolo.d": "Conjunto de documentos de una obra: procedimientos, autorizaciones, condiciones, controles e historial.",
+  "gl.inspire.t": "INSPIRE",
+  "gl.inspire.d": "Directiva e infraestructura europeas para compartir datos territoriales y ambientales.",
+  "gl.eea.t": "AEMA – Agencia Europea de Medio Ambiente (EEA)",
+  "gl.eea.d": "Agencia de la Unión Europea que recopila y publica datos ambientales, entre ellos los del Portal Europeo de Emisiones Industriales."
  },
  "fr": {
   "nav.problem": "Le problème",
@@ -866,7 +1069,58 @@ footer p{margin:0}
   "js.real.pop.permit": "Dernière autorisation communiquée",
   "js.real.pop.country": "Pays",
   "js.real.pop.note": "Les données sont communiquées par les États et peuvent être incomplètes : l’absence d’une information ne signifie pas que l’autorisation manque.",
-  "js.real.pop.nodata": "donnée non disponible"
+  "js.real.pop.nodata": "donnée non disponible",
+  "find.place.label": "Rechercher une commune ou une adresse",
+  "find.place.ph": "Rechercher une commune ou une adresse",
+  "find.place.btn": "Rechercher",
+  "find.works.label": "Rechercher parmi les ouvrages",
+  "find.works.ph": "Ex. déchets, code, lieu, société",
+  "find.works.type": "Type d’activité",
+  "find.works.state": "État",
+  "find.works.alltypes": "Toutes les activités",
+  "find.works.allstates": "Tous les états",
+  "find.works.note": "Vous pouvez aussi chercher par autorisation ou par responsable. Dans la démonstration, le responsable est le même pour tous les ouvrages.",
+  "js.f.searching": "Recherche en cours…",
+  "js.f.none": "Aucun résultat. Essayez le nom de la commune, ou une rue et un numéro.",
+  "js.f.err": "La recherche a échoué. Vérifiez votre connexion et réessayez.",
+  "js.w.count": "Ouvrages trouvés : {n}",
+  "js.w.none": "Aucun ouvrage trouvé. Essayez avec moins de mots ou retirez un filtre.",
+  "js.w.reset": "Effacer la recherche",
+  "js.w.sc.ue": "Union européenne",
+  "js.w.sc.paese": "Pays",
+  "js.w.sc.comune": "Commune",
+  "gd.h": "Comment contribuer",
+  "gd.lead": "Inutile de savoir programmer. Choisissez la façon qui vous convient le mieux.",
+  "gd.1.h": "Traduire ou relire une traduction",
+  "gd.1.p": "Le site est en italien, anglais, espagnol, français et portugais. Nous cherchons des locuteurs natifs pour relire les textes et, surtout, le glossaire ci-dessous : les termes techniques ne se traduisent pas mot à mot, car chaque pays a son propre nom officiel pour chaque procédure. Ouvrez le code sur GitHub : les textes de chaque langue se trouvent dans le fichier index.html. Proposez votre correction par un ticket (issue) ou une modification.",
+  "gd.2.h": "Vous connaissez les procédures environnementales de votre pays",
+  "gd.2.p": "Dites-nous comment s’appelle chaque procédure dans votre pays, quel organisme la délivre et où l’on consulte les documents. Un exemple concret vaut mieux qu’une longue explication.",
+  "gd.3.h": "Vous travaillez avec des données ou des cartes",
+  "gd.3.p": "Nous avons besoin de personnes capables de relier les sources publiques (AEE, INSPIRE, Natura 2000) à la carte et de signaler ce qui manque dans les données. Écrivez dans un ticket GitHub ce que vous aimeriez essayer.",
+  "gd.4.h": "Signaler une erreur ou une idée",
+  "gd.4.p": "Ouvrez un ticket (issue) sur GitHub : une phrase suffit. Indiquez ce que vous avez trouvé et, si possible, dans quelle partie de la page.",
+  "gd.gl.h": "Glossaire",
+  "gd.gl.note": "Version de travail en italien, avec une première traduction dans les autres langues : chaque définition doit être vérifiée par quelqu’un qui connaît le système de son propre pays.",
+  "gl.via.t": "EIE – Évaluation des incidences sur l’environnement (VIA en Italie)",
+  "gl.via.d": "Procédure qui évalue, avant la réalisation, les effets d’un projet sur l’environnement.",
+  "gl.vas.t": "EES – Évaluation environnementale stratégique (VAS en Italie)",
+  "gl.vas.d": "Comme l’EIE, mais pour les plans et programmes plutôt que pour un projet isolé.",
+  "gl.assogg.t": "Examen au cas par cas (verifica di assoggettabilità)",
+  "gl.assogg.d": "Contrôle préalable qui détermine si un projet ou un plan doit faire l’objet d’une EIE ou d’une EES.",
+  "gl.aia.t": "AIA – Autorisation environnementale intégrée",
+  "gl.aia.d": "Autorisation unique pour les installations industrielles les plus importantes : elle couvre les émissions dans l’air, les rejets, les déchets et le bruit.",
+  "gl.vinca.t": "Évaluation des incidences Natura 2000 (VIncA en Italie)",
+  "gl.vinca.d": "Évalue les effets d’un projet ou d’un plan sur les habitats et les espèces protégés des sites Natura 2000.",
+  "gl.n2000.t": "Natura 2000",
+  "gl.n2000.d": "Réseau européen d’espaces protégés pour les habitats et les espèces d’intérêt communautaire.",
+  "gl.titolo.t": "Titre d’autorisation (titolo autorizzativo)",
+  "gl.titolo.d": "Toute autorisation, concession ou autre acte qu’un ouvrage doit obtenir pour être réalisé ou pour fonctionner.",
+  "gl.fascicolo.t": "Dossier (fascicolo)",
+  "gl.fascicolo.d": "L’ensemble des documents d’un ouvrage : procédures, autorisations, prescriptions, contrôles et historique.",
+  "gl.inspire.t": "INSPIRE",
+  "gl.inspire.d": "Directive et infrastructure européennes pour partager des données territoriales et environnementales.",
+  "gl.eea.t": "AEE – Agence européenne pour l’environnement (EEA)",
+  "gl.eea.d": "Agence de l’Union européenne qui collecte et publie des données environnementales, dont celles du Portail européen des émissions industrielles."
  },
  "pt": {
   "nav.problem": "O problema",
@@ -1021,7 +1275,58 @@ footer p{margin:0}
   "js.real.pop.permit": "Última autorização comunicada",
   "js.real.pop.country": "País",
   "js.real.pop.note": "Os dados são comunicados pelos Estados e podem estar incompletos: se falta uma informação, não significa que falte a autorização.",
-  "js.real.pop.nodata": "dado não disponível"
+  "js.real.pop.nodata": "dado não disponível",
+  "find.place.label": "Pesquisar um concelho ou uma morada",
+  "find.place.ph": "Pesquisar um concelho ou uma morada",
+  "find.place.btn": "Pesquisar",
+  "find.works.label": "Pesquisar entre as obras",
+  "find.works.ph": "Ex. resíduos, código, local, empresa",
+  "find.works.type": "Tipo de atividade",
+  "find.works.state": "Estado",
+  "find.works.alltypes": "Todas as atividades",
+  "find.works.allstates": "Todos os estados",
+  "find.works.note": "Também pode pesquisar por autorização ou por responsável. Na demonstração, o responsável é o mesmo para todas as obras.",
+  "js.f.searching": "A pesquisar…",
+  "js.f.none": "Sem resultados. Tente o nome do concelho ou rua e número de porta.",
+  "js.f.err": "A pesquisa falhou. Verifique a ligação e tente novamente.",
+  "js.w.count": "Obras encontradas: {n}",
+  "js.w.none": "Nenhuma obra encontrada. Tente com menos palavras ou retire um filtro.",
+  "js.w.reset": "Limpar a pesquisa",
+  "js.w.sc.ue": "União Europeia",
+  "js.w.sc.paese": "País",
+  "js.w.sc.comune": "Concelho",
+  "gd.h": "Como colaborar",
+  "gd.lead": "Não é preciso saber programar. Escolha a forma que lhe for mais próxima.",
+  "gd.1.h": "Traduzir ou rever uma tradução",
+  "gd.1.p": "O site está em italiano, inglês, espanhol, francês e português. Procuramos falantes nativos que leiam os textos e, sobretudo, o glossário abaixo: os termos técnicos não se traduzem palavra a palavra, porque cada país tem o seu próprio nome oficial para cada procedimento. Abra o código no GitHub: os textos de cada língua estão no ficheiro index.html. Proponha a sua correção através de uma questão (issue) ou de uma alteração.",
+  "gd.2.h": "Conhece os procedimentos ambientais do seu país",
+  "gd.2.p": "Diga-nos como se chama cada procedimento no seu país, que entidade o emite e onde se consultam os documentos. Um exemplo concreto vale mais do que uma explicação longa.",
+  "gd.3.h": "Trabalha com dados ou mapas",
+  "gd.3.p": "Precisamos de pessoas que saibam ligar as fontes públicas (AEA, INSPIRE, Natura 2000) ao mapa e assinalar o que falta nos dados. Escreva numa questão do GitHub o que gostaria de experimentar.",
+  "gd.4.h": "Comunicar um erro ou uma ideia",
+  "gd.4.p": "Abra uma questão (issue) no GitHub: basta uma frase. Indique o que encontrou e, se puder, em que parte da página.",
+  "gd.gl.h": "Glossário",
+  "gd.gl.note": "Versão de trabalho em italiano, com uma primeira tradução nas outras línguas: cada definição deve ser verificada por quem conhece o sistema do seu próprio país.",
+  "gl.via.t": "AIA – Avaliação de impacte ambiental (VIA em Itália)",
+  "gl.via.d": "Procedimento que avalia, antes da execução, os efeitos de um projeto no ambiente.",
+  "gl.vas.t": "AAE – Avaliação ambiental estratégica (VAS em Itália)",
+  "gl.vas.d": "Como a AIA, mas para planos e programas e não para um projeto isolado.",
+  "gl.assogg.t": "Decisão de sujeição (verifica di assoggettabilità)",
+  "gl.assogg.d": "Verificação prévia que determina se um projeto ou plano tem de ser sujeito a AIA ou a AAE.",
+  "gl.aia.t": "Autorização ambiental integrada",
+  "gl.aia.d": "Autorização única para as instalações industriais mais relevantes: inclui emissões para o ar, descargas, resíduos e ruído.",
+  "gl.vinca.t": "Avaliação de incidências ambientais (VIncA em Itália)",
+  "gl.vinca.d": "Avalia os efeitos de um projeto ou plano em habitats e espécies protegidos nos sítios Natura 2000.",
+  "gl.n2000.t": "Natura 2000",
+  "gl.n2000.d": "Rede europeia de áreas protegidas para habitats e espécies de interesse comunitário.",
+  "gl.titolo.t": "Título de autorização (titolo autorizzativo)",
+  "gl.titolo.d": "Qualquer autorização, concessão ou outro ato que uma obra tem de obter para ser executada ou para funcionar.",
+  "gl.fascicolo.t": "Processo (fascicolo)",
+  "gl.fascicolo.d": "O conjunto de documentos de uma obra: procedimentos, autorizações, condições, controlos e histórico.",
+  "gl.inspire.t": "INSPIRE",
+  "gl.inspire.d": "Diretiva e infraestrutura europeias para partilhar dados territoriais e ambientais.",
+  "gl.eea.t": "AEA – Agência Europeia do Ambiente (EEA)",
+  "gl.eea.d": "Agência da União Europeia que recolhe e publica dados ambientais, incluindo os do Portal Europeu das Emissões Industriais."
  }
 };
   var JS_IT = {
@@ -1089,7 +1394,58 @@ footer p{margin:0}
  "js.real.pop.permit": "Ultima autorizzazione comunicata",
  "js.real.pop.country": "Paese",
  "js.real.pop.note": "I dati sono comunicati dagli Stati e possono essere incompleti: se un’informazione manca, non significa che l’autorizzazione manchi.",
- "js.real.pop.nodata": "dato non disponibile"
+ "js.real.pop.nodata": "dato non disponibile",
+ "find.place.label": "Cerca un comune o un indirizzo",
+ "find.place.ph": "Cerca un comune o un indirizzo",
+ "find.place.btn": "Cerca",
+ "find.works.label": "Cerca tra le opere",
+ "find.works.ph": "Es. rifiuti, codice, luogo, società",
+ "find.works.type": "Tipo di attività",
+ "find.works.state": "Stato",
+ "find.works.alltypes": "Tutte le attività",
+ "find.works.allstates": "Tutti gli stati",
+ "find.works.note": "Cerca anche per titolo autorizzativo o per soggetto responsabile. Nella dimostrazione il soggetto responsabile è lo stesso per tutte le opere.",
+ "js.f.searching": "Cerco…",
+ "js.f.none": "Nessun risultato. Prova con il nome del comune o con via e numero civico.",
+ "js.f.err": "La ricerca non è riuscita. Controlla la connessione e riprova.",
+ "js.w.count": "Opere trovate: {n}",
+ "js.w.none": "Nessuna opera trovata. Prova con meno parole o togli un filtro.",
+ "js.w.reset": "Azzera la ricerca",
+ "js.w.sc.ue": "Unione europea",
+ "js.w.sc.paese": "Paese",
+ "js.w.sc.comune": "Comune",
+ "gd.h": "Come collaborare",
+ "gd.lead": "Non serve saper programmare. Scegli il modo che ti è più vicino.",
+ "gd.1.h": "Traduci o controlla una traduzione",
+ "gd.1.p": "Il sito è in italiano, inglese, spagnolo, francese e portoghese. Cerchiamo madrelingua che leggano i testi e, soprattutto, il glossario qui sotto: i termini tecnici non si traducono parola per parola, perché ogni Paese ha il proprio nome ufficiale per ogni procedura. Apri il codice su GitHub: i testi di ogni lingua sono nel file index.html. Proponi la correzione con una segnalazione (Issue) o con una modifica.",
+ "gd.2.h": "Conosci i procedimenti ambientali del tuo Paese",
+ "gd.2.p": "Dicci come si chiama ogni procedura nel tuo Paese, quale ente la rilascia e dove si consultano i documenti. Un esempio concreto vale più di una spiegazione lunga.",
+ "gd.3.h": "Lavori con dati o mappe",
+ "gd.3.p": "Ci servono persone che sappiano collegare le fonti pubbliche (EEA, INSPIRE, Natura 2000) alla mappa e che segnalino cosa manca nei dati. Scrivi in una segnalazione su GitHub cosa vorresti provare.",
+ "gd.4.h": "Segnala un errore o un’idea",
+ "gd.4.p": "Apri una segnalazione (Issue) su GitHub: basta una frase. Indica che cosa hai trovato e, se puoi, in quale parte della pagina.",
+ "gd.gl.h": "Glossario",
+ "gd.gl.note": "Versione di lavoro in italiano, con una prima traduzione nelle altre lingue: ogni definizione va controllata da chi conosce il sistema del proprio Paese.",
+ "gl.via.t": "VIA – Valutazione di impatto ambientale (EIA)",
+ "gl.via.d": "Procedura che valuta, prima della realizzazione, gli effetti di un progetto sull’ambiente.",
+ "gl.vas.t": "VAS – Valutazione ambientale strategica (SEA)",
+ "gl.vas.d": "Come la VIA, ma per piani e programmi invece che per il singolo progetto.",
+ "gl.assogg.t": "Verifica di assoggettabilità (screening)",
+ "gl.assogg.d": "Controllo preliminare che stabilisce se un progetto o un piano deve essere sottoposto a VIA o a VAS.",
+ "gl.aia.t": "AIA – Autorizzazione integrata ambientale",
+ "gl.aia.d": "Autorizzazione unica per gli impianti industriali più rilevanti: comprende emissioni in aria, scarichi, rifiuti e rumore.",
+ "gl.vinca.t": "VIncA – Valutazione di incidenza ambientale",
+ "gl.vinca.d": "Valuta gli effetti di un progetto o di un piano su habitat e specie protetti nei siti Natura 2000.",
+ "gl.n2000.t": "Natura 2000",
+ "gl.n2000.d": "Rete europea di aree protette per habitat e specie di interesse comunitario.",
+ "gl.titolo.t": "Titolo autorizzativo",
+ "gl.titolo.d": "Qualsiasi autorizzazione, concessione o altro atto che un’opera deve ottenere per essere realizzata o per funzionare.",
+ "gl.fascicolo.t": "Fascicolo",
+ "gl.fascicolo.d": "L’insieme dei documenti di un’opera: procedimenti, titoli, prescrizioni, controlli e storico.",
+ "gl.inspire.t": "INSPIRE",
+ "gl.inspire.d": "Direttiva e infrastruttura europea per condividere dati territoriali e ambientali.",
+ "gl.eea.t": "EEA – Agenzia europea dell’ambiente",
+ "gl.eea.d": "Agenzia dell’Unione europea che raccoglie e pubblica dati ambientali, tra cui quelli del Portale europeo sulle emissioni industriali."
 };
   var SUPPORTED = ["it", "en", "es", "fr", "pt"];
   var lang = "it";
@@ -1233,6 +1589,8 @@ footer p{margin:0}
     }
     captionEl.textContent = t(VIEWS[current].cap);
     updateRealUi();
+    fillSelects();
+    renderWorks();
     if (map) buildControl();
     renderPoints(current);
     if (selectedP) showFile(selectedP); else fileEl.innerHTML = emptyHtml();
@@ -1297,6 +1655,7 @@ footer p{margin:0}
   function renderPoints(key){
     if (mode === "leaflet" && layer) renderLeaflet(key); else renderFallback(key);
     reselect();
+    applyDim();
   }
 
   /* ---------- Mappa dettagliata (Leaflet) ---------- */
@@ -1469,13 +1828,156 @@ footer p{margin:0}
     fbEl.removeAttribute("hidden");
     noteEl.removeAttribute("hidden");
     realBox.setAttribute("hidden", "");
+    placeBox.setAttribute("hidden", "");
     updateOsmLink();
     renderFallback(current);
     reselect();
   }
 
+  /* ---------- Ricerca: luogo e opere ---------- */
+  var placeBox = document.getElementById("placeBox");
+  var placeForm = document.getElementById("placeForm");
+  var placeQ = document.getElementById("placeQ");
+  var placeMsg = document.getElementById("placeMsg");
+  var worksQ = document.getElementById("worksQ");
+  var worksType = document.getElementById("worksType");
+  var worksState = document.getElementById("worksState");
+  var worksMsg = document.getElementById("worksMsg");
+  var worksList = document.getElementById("worksList");
+  var worksReset = document.getElementById("worksReset");
+  var worksForm = document.getElementById("worksForm");
+  var placeMark = null, placeReq = 0, lastRes = [];
+
+  function norm(s){
+    s = (s + "").toLowerCase();
+    return s.normalize ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : s;
+  }
+  function hay(p){
+    var parts = [t(TPL[p[3]].name), p[4], t(p[5]), t(SHAPES[p[2]].k), t("js.c.respval"), t("js.c.compval")];
+    TPL[p[3]].titles.forEach(function(k){ parts.push(t(k)); });
+    return norm(parts.join(" "));
+  }
+  function worksFilterOn(){
+    return !!(worksQ.value.trim() || worksType.value !== "" || worksState.value !== "");
+  }
+  function matches(p){
+    if (worksType.value !== "" && String(p[3]) !== worksType.value) return false;
+    if (worksState.value !== "" && p[2] !== worksState.value) return false;
+    var tokens = norm(worksQ.value).split(/\s+/).filter(Boolean);
+    if (!tokens.length) return true;
+    var h = hay(p);
+    return tokens.every(function(k){ return h.indexOf(k) >= 0; });
+  }
+  function fillSelects(){
+    var tv = worksType.value, sv = worksState.value;
+    worksType.innerHTML = '<option value="">' + t("find.works.alltypes") + '</option>' +
+      TPL.map(function(x, i){ return '<option value="' + i + '">' + t(x.name) + '</option>'; }).join("");
+    worksState.innerHTML = '<option value="">' + t("find.works.allstates") + '</option>' +
+      ["ok", "proc", "irr"].map(function(k){ return '<option value="' + k + '">' + t(SHAPES[k].k) + '</option>'; }).join("");
+    worksType.value = tv;
+    worksState.value = sv;
+  }
+  function elFor(p){
+    var found = null;
+    if (mode === "leaflet" && layer){
+      layer.eachLayer(function(m){ if (m._p === p && m.getElement()) found = m.getElement(); });
+    } else {
+      var gs = fbPoints.children;
+      for (var i = 0; i < gs.length; i++){ if (gs[i]._p === p) found = gs[i]; }
+    }
+    return found;
+  }
+  function applyDim(){
+    var on = worksFilterOn();
+    if (mode === "leaflet" && layer){
+      layer.eachLayer(function(m){
+        var e = m.getElement && m.getElement();
+        if (e) e.classList.toggle("dim", on && !matches(m._p));
+      });
+    } else {
+      var gs = fbPoints.children;
+      for (var i = 0; i < gs.length; i++){ gs[i].classList.toggle("dim", on && !matches(gs[i]._p)); }
+    }
+  }
+  function renderWorks(){
+    var on = worksFilterOn();
+    worksReset.hidden = !on;
+    if (!on){
+      lastRes = [];
+      worksList.hidden = true;
+      worksList.innerHTML = "";
+      worksMsg.textContent = "";
+      return;
+    }
+    lastRes = [];
+    ["ue", "paese", "comune"].forEach(function(k){
+      VIEWS[k].pts.forEach(function(p){ if (matches(p)) lastRes.push({key:k, p:p}); });
+    });
+    worksMsg.textContent = lastRes.length ? t("js.w.count").replace("{n}", lastRes.length) : t("js.w.none");
+    worksList.innerHTML = lastRes.map(function(w, i){
+      var p = w.p;
+      return '<li><button type="button" data-i="' + i + '">' +
+        '<span class="wl-t">' + t(TPL[p[3]].name) + ' · ' + p[4] + '</span>' +
+        '<span class="wl-s"><span class="st ' + p[2] + '">' + iconSvg(p[2]) + '</span>' +
+        t(SHAPES[p[2]].k) + ' · ' + t(p[5]) + ' · ' + t("js.w.sc." + w.key) + '</span>' +
+        '</button></li>';
+    }).join("");
+    worksList.hidden = !lastRes.length;
+  }
+  function onWorksChange(){ renderWorks(); applyDim(); }
+
+  worksForm.addEventListener("submit", function(e){ e.preventDefault(); });
+  worksQ.addEventListener("input", onWorksChange);
+  worksType.addEventListener("change", onWorksChange);
+  worksState.addEventListener("change", onWorksChange);
+  worksReset.addEventListener("click", function(){
+    worksQ.value = "";
+    worksType.value = "";
+    worksState.value = "";
+    onWorksChange();
+    worksQ.focus();
+  });
+  worksList.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("button[data-i]") : null;
+    if (!b) return;
+    var w = lastRes[parseInt(b.getAttribute("data-i"), 10)];
+    if (!w) return;
+    buttons.forEach(function(x){
+      x.setAttribute("aria-pressed", x.getAttribute("data-view") === w.key ? "true" : "false");
+    });
+    setView(w.key, w.p);
+    fileEl.scrollIntoView({block:"nearest", behavior: reduce ? "auto" : "smooth"});
+  });
+
+  // Ricerca di un luogo con Nominatim (OpenStreetMap): una richiesta per invio, mai a ogni tasto.
+  placeForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var q = placeQ.value.trim();
+    if (!q || mode !== "leaflet" || !map) return;
+    var req = ++placeReq;
+    placeMsg.textContent = t("js.f.searching");
+    if (!window.fetch){ placeMsg.textContent = t("js.f.err"); return; }
+    var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=" +
+      encodeURIComponent(lang) + "&q=" + encodeURIComponent(q);
+    fetch(url).then(function(r){
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).then(function(res){
+      if (req !== placeReq) return;
+      if (!res.length){ placeMsg.textContent = t("js.f.none"); return; }
+      var r0 = res[0], b = r0.boundingbox.map(Number);
+      map.fitBounds([[b[0], b[2]], [b[1], b[3]]], {maxZoom:16, animate:!reduce});
+      if (placeMark) map.removeLayer(placeMark);
+      placeMark = L.circleMarker([Number(r0.lat), Number(r0.lon)], {radius:10, color:"#0B57D0", weight:3, fill:false, interactive:false}).addTo(map);
+      placeMsg.textContent = r0.display_name;
+    }).catch(function(){
+      if (req !== placeReq) return;
+      placeMsg.textContent = t("js.f.err");
+    });
+  });
+
   /* ---------- Cambio di scala ---------- */
-  function setView(key){
+  function setView(key, focus){
     current = key;
     var v = VIEWS[key];
     selectedEl = null;
@@ -1483,10 +1985,17 @@ footer p{margin:0}
     captionEl.textContent = t(v.cap);
     fileEl.innerHTML = emptyHtml();
     updateOsmLink();
+    if (placeMark && map){ map.removeLayer(placeMark); placeMark = null; }
     renderPoints(key);
     if (mode === "leaflet"){
-      if (reduce) map.setView(v.center, v.zoom);
-      else map.flyTo(v.center, v.zoom, {duration:1.4});
+      var target = focus ? [focus[0], focus[1]] : v.center;
+      var z = focus ? v.zoom + 1 : v.zoom;
+      if (reduce) map.setView(target, z);
+      else map.flyTo(target, z, {duration:1.4});
+    }
+    if (focus){
+      var el = elFor(focus);
+      if (el) choose(el, focus);
     }
   }
 
